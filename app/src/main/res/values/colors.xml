@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#3F51B5</color>
+    <color name="colorPrimaryDark">#303F9F</color>
+    <color name="colorAccent">#FF4081</color>
+    <color name="colorText">#F9F7F7</color>
+    <color name="transparent">#00000000</color>
+    <color name="online">#aa04f538</color>
+    <color name="offline">#aaa</color>
+    <color name="backgroundchat">#FAFAFA</color>
+    <color name="create_group_tv_name">#01579B</color>
+    <color name="colorTheme">#0288D1</color>
+    <color name="green_chat_right">#33cc33</color>
+    <color name="grey_chat_left">#85adad</color>
+    <color name="lineBetweenTabHost">#0068a7</color>
+    <color name="textGreyColor">#f2f2f2</color>
+    <color name="bt_login_register_color">#e6f3ff</color>
+    <color name="maker_footer_red">#E53935</color>
+    <color name="maker_footer_purple">#8E24AA</color>
+    <color name="sky">#D2E3F8</color>
+    <color name="maker_footer_blue">#1E88E5</color>
+    <color name="maker_footer_orange">#FB8C00</color>
+    <color name="pg_color">#BDBDBD</color>
+    <color name="line_color">#9E9E9E</color>
+    <color name="product_detail_background">#E0F7FA</color>
+    <color name="text_white">#fff</color>
+    <color name="toolbar">#44393D</color>
+
+    <color name="bg_gradient_start">#31244e</color>
+    <color name="bg_gradient_end">#6b394c</color>
+    <color name="colorOrangeBrand">#FF9800</color>
+    <color name="colorLightGray">#F3F3F3</color>
+    <color name="colorGray">#e3e3e3</color>
+    <color name="colorGrayDark">#8B8B8B</color>
+    <color name="colorBlack">#000000</color>
+
+    <color name="colorToolbar">#F8F8F8</color>
+    <color name="colorBluePaste">#7AABFF</color>
+    <color name="colorBlueDark">#537DC5</color>
+
+    <color name="colorGreen">#53933f</color>
+    <color name="colorblue">#068EA0</color>
+    <color name="colorMBlue">#1499FF</color>
+    <color name="colorRed">#ff0033</color>
+    <color name="colorBottomNav">#1B2F8D</color>
+    <color name="colorprint">#FF1493</color>
+    <color name="priority3">#e61919</color>
+    <color name="priority1">#36bf00</color>
+    <color name="priority2">#bf7400</color>
+
+</resources>

@@ -1,0 +1,15 @@
+<resources>
+    <string name="app_name">Quản lý kho giày</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="nav_header_title">Android Studio</string>
+    <string name="nav_header_subtitle">android.studio@android.com</string>
+    <string name="nav_header_desc">Navigation header</string>
+    <string name="action_settings">Settings</string>
+    <string name="hint_username">Tên đăng nhập</string>
+    <string name="hint_password">Mật khẩu</string>
+    <string name="hint_repassword">Nhâp lại mật khẩu</string>
+    <string name="hint_phone">Số điện thoại</string>
+    <string name="hint_email">Email</string>
+    <string name="change_pass">Đổi mật khẩu</string>
+</resources>

@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="navigation_view">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_HangHoa"
+            android:icon="@drawable/product"
+            android:title="Hàng hóa" />
+        <item
+            android:id="@+id/nav_DanhMuc"
+            android:icon="@drawable/ic_product_documents"
+            android:title="Danh mục" />
+        <item
+            android:id="@+id/nav_NhanSu"
+            android:icon="@drawable/ic_person"
+            android:title="Nhân sự" />
+    </group>
+
+    <item android:title="Tài khoản"
+        android:icon="@drawable/ic_account"
+        android:id="@+id/nav_TaiKhoan"/>
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_DoiMatKhau"
+            android:icon="@drawable/ic_changepass"
+            android:title="Đổi mật khẩu"/>
+        <item
+            android:id="@+id/nav_DangXuat"
+            android:title="Đăng xuất"
+            android:icon="@drawable/ic_logout"/>
+    </group>
+
+</menu>

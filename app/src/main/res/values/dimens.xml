@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+<!-- Default screen margins, per the Android Design guidelines. -->
+    <dimen name="activity_horizontal_margin">16dp</dimen>
+    <dimen name="activity_vertical_margin">16dp</dimen>
+    <dimen name="nav_header_vertical_spacing">8dp</dimen>
+    <dimen name="nav_header_height">176dp</dimen>
+    <dimen name="fab_margin">16dp</dimen>
+    
+    <!-- Default screen margins, per the Android Design guidelines. -->
+    <dimen name="text_normal">15sp</dimen>
+    <dimen name="textsize">18dp</dimen> <!-- main fragment -->
+    <dimen name="height_toolbar">60dp</dimen>
+    <dimen name="width_navigation">280dp</dimen>
+    <dimen name="main_fragment_button_exit_padding">5dp</dimen>
+    <dimen name="main_fragment_edittext_padding">2dp</dimen>
+    <dimen name="main_fragment_edittext_size">18sp</dimen>
+    <dimen name="main_fragment_text_or_size">16sp</dimen>
+    <dimen name="main_fragment_text_size">10sp</dimen>
+    <dimen name="main_fragment_edittext_margin">2dp</dimen>
+    <dimen name="main_fragment_button_padding_left_right">15dp</dimen>
+    <dimen name="main_fragment_button_padding_top_bottom">5dp</dimen>
+    <dimen name="main_fragment_layout_button_margin">10dp</dimen>
+    <dimen name="main_fragment_view_height">18dp</dimen>
+
+    <!-- login fragment -->
+    <dimen name="login_fragment_text_login_size">20sp</dimen>
+    <dimen name="login_fragment_layout_margin">3dp</dimen>
+    <dimen name="login_fragment_edittext_padding">10dp</dimen>
+    <dimen name="login_fragment_text_or_size">15sp</dimen>
+    <dimen name="logo_margin_top">30dp</dimen>
+    <dimen name="logo_margin_bottom">20dp</dimen>
+    <dimen name="form_padding_left_right">50dp</dimen>
+    <dimen name="form_padding_top">20dp</dimen>
+    <dimen name="edit_text_margin_left">10dp</dimen>
+    <dimen name="input_field_padding">10dp</dimen>
+    <dimen name="input_field_margin_top">10dp</dimen>
+
+    <!-- register fragment -->
+    <dimen name="register_fragment_layout_margin">3dp</dimen>
+    <dimen name="register_fragment_text_login_size">20sp</dimen>
+    <dimen name="register_fragment_edittext_padding">10dp</dimen>
+
+    <!-- room fragment -->
+    <dimen name="room_fragment_layout_margin">3dp</dimen>
+    <dimen name="room_fragment_background_padding">3dp</dimen>
+    <dimen name="room_layout_top_padding">20dp</dimen>
+    <dimen name="room_button_back_padding">3dp</dimen>
+    <dimen name="room_text_title_size">15sp</dimen>
+    <dimen name="room_text_title_list_size">12sp</dimen>
+    <dimen name="room_text_info_size">10sp</dimen>
+    <dimen name="room_text_info_margin">10dp</dimen>
+    <dimen name="room_avatar_margin">3dp</dimen>
+    <dimen name="room_text_level_size">8sp</dimen>
+
+    <!-- Game Panel -->
+    <dimen name="game_panel_back_padding">5dp</dimen>
+    <dimen name="game_panel_back_text_size">20sp</dimen>
+    <dimen name="game_panel_back_button_padding">5dp</dimen>
+    <dimen name="game_panel_help_content_text_size">15sp</dimen>
+    <dimen name="game_panel_help_content_text_padding">10dp</dimen>
+    <dimen name="game_panel_help_button_back_magin_bottom">20dp</dimen>
+    <dimen name="game_panel_help_button_back_magin_top">15dp</dimen>
+    <dimen name="game_panel_button_ok_padding">25dp</dimen>
+    <dimen name="game_panel_back_button_ok_padding">5dp</dimen>
+    <dimen name="game_panel_text_cost_size">30dp</dimen>
+    <dimen name="game_panel_chat_list_magrin_top">10dp</dimen>
+
+
+    <!-- text size -->
+    <dimen name="text_size_large">20sp</dimen>
+    <dimen name="text_size_nor">16sp</dimen>
+    <dimen name="text_size_small">13sp</dimen>
+    <dimen name="text_size_smallest">10sp</dimen>
+
+    <!-- padding -->
+    <dimen name="padding_large">20dp</dimen>
+    <dimen name="padding_nor">15dp</dimen>
+    <dimen name="padding_small">10dp</dimen>
+    <dimen name="padding_smallest">5dp</dimen>
+
+
+    <!-- margin -->
+    <dimen name="margin_large">20dp</dimen>
+    <dimen name="margin_normal">15dp</dimen>
+    <dimen name="margin_small">10dp</dimen>
+    <dimen name="margin_smallest">5dp</dimen>
+
+    <!-- size View -->
+    <dimen name="height_etxt_login">27dp</dimen>
+    <dimen name="width_btn_login">90dp</dimen>
+    <dimen name="height_btn_login">52dp</dimen>
+    <!-- Default screen margins, per the Android Design guidelines. -->
+ 
+
+    <!-- image chat -->
+    <dimen name="btn_chat_size">45dp</dimen>
+    <dimen name="btn_chat_send">55dp</dimen>
+    <dimen name="btn_chat_magrin">10dp</dimen>
+    <dimen name="mini_border">1dp</dimen>
+    <dimen name="medium_border">5dp</dimen>
+    <dimen name="pd15">15dp</dimen>
+    <dimen name="pd30">30dp</dimen>
+    <dimen name="pd45">45dp</dimen>
+    <dimen name="edit_text_mini_height">40dp</dimen>
+    <dimen name="medium_text">15sp</dimen>
+    <dimen name="w15">15dp</dimen>
+    <dimen name="w30">30dp</dimen>
+    <dimen name="w20">20dp</dimen>
+    <dimen name="mt10">10dp</dimen>
+    <dimen name="w40">40dp</dimen>
+    <dimen name="w50">50dp</dimen>
+    <dimen name="pd20">20dp</dimen>
+    <dimen name="w100">100dp</dimen>
+    <dimen name="font_13sp">13sp</dimen>
+    <dimen name="font_10sp">10sp</dimen>
+    <dimen name="w10">10dp</dimen>
+    <dimen name="w8">8dp</dimen>
+    <dimen name="w2">2dp</dimen>
+    <dimen name="w70">70dp</dimen>
+    <dimen name="font_12sp">12sp</dimen>
+    <dimen name="w5">5dp</dimen>
+    <dimen name="w35">35dp</dimen>
+    <dimen name="w60">60dp</dimen>
+    <dimen name="sp15">15sp</dimen>
+    <dimen name="sp18">18sp</dimen>
+    <dimen name="sp12">12sp</dimen>
+    <dimen name="w12">12dp</dimen>
+    <dimen name="w16">16dp</dimen>
+    <dimen name="w200">200dp</dimen>
+    <dimen name="sp20">20sp</dimen>
+    <dimen name="sp21">21sp</dimen>
+    <dimen name="sp14">14sp</dimen>
+
+    <dimen name="spinner_text_size">12sp</dimen>
+    <dimen name="switch_padding">-1dp</dimen>
+    <dimen name="switch_radius">36dp</dimen>
+    <dimen name="switch_size">36dp</dimen>
+    <dimen name="custom_checkbox">24dp</dimen>
+    <dimen name="custom_checkbox1">9dp</dimen>
+    <dimen name="custom_checkbox2">5dp</dimen>
+    <dimen name="sp10">10sp</dimen>
+    <dimen name="w140">140dp</dimen>
+    <dimen name="w60_item">60dp</dimen>
+    <dimen name="bt120">120dp</dimen>
+    <dimen name="pd50">50dp</dimen>
+    <dimen name="w120">120dp</dimen>
+</resources>

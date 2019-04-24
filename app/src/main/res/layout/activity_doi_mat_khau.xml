@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:background="#FFFF"
+    android:layout_height="match_parent"
+
+    android:orientation="vertical">
+    <RelativeLayout
+        android:id="@+id/rl_tool_bar"
+        android:layout_width="match_parent"
+        android:background="@drawable/rect_shadow"
+        android:outlineProvider="bounds"
+        android:layout_height="wrap_content">
+        <ImageView
+            android:padding="@dimen/mt10"
+            android:id="@+id/iv_back"
+            android:src="@drawable/ic_action_arrow_left"
+            android:layout_width="@dimen/w50"
+            android:layout_height="@dimen/w50" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="@string/change_pass"
+            android:textSize="@dimen/sp18"
+            android:textColor="@color/text_white"
+            android:textStyle="bold" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_marginTop="@dimen/mt10"
+        android:layout_below="@+id/rl_tool_bar"
+        android:padding="@dimen/mt10"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <LinearLayout
+            android:padding="2px"
+            android:id="@+id/ll_old_password"
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:background="@drawable/bg_edittext_user"
+            android:layout_height="wrap_content">
+            <ImageView
+                android:layout_marginLeft="@dimen/mt10"
+                android:layout_gravity="center_vertical"
+                android:src="@drawable/ic_user_login"
+                android:layout_width="@dimen/w20"
+                android:layout_height="@dimen/w20" />
+            <EditText
+                android:textSize="14sp"
+                android:layout_marginRight="@dimen/pd15"
+                android:id="@+id/et_old_password"
+                android:paddingLeft="@dimen/pd15"
+                android:hint="Mật khẩu cũ"
+                android:background="@color/text_white"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/edit_text_mini_height" />
+        </LinearLayout>
+        <LinearLayout
+            android:layout_marginTop="@dimen/mt10"
+            android:layout_below="@+id/ll_old_password"
+            android:padding="2px"
+            android:id="@+id/ll_new_password"
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:background="@drawable/bg_edittext_user"
+            android:layout_height="wrap_content">
+            <ImageView
+                android:layout_marginLeft="@dimen/mt10"
+                android:layout_gravity="center_vertical"
+                android:src="@drawable/ic_user_login"
+                android:layout_width="@dimen/w20"
+                android:layout_height="@dimen/w20" />
+            <EditText
+                android:textSize="14sp"
+                android:layout_marginRight="@dimen/pd15"
+                android:id="@+id/et_new_password"
+                android:paddingLeft="@dimen/pd15"
+                android:hint="Mật khẩu mới"
+                android:background="@color/text_white"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/edit_text_mini_height" />
+        </LinearLayout>
+        <LinearLayout
+            android:layout_marginTop="@dimen/mt10"
+            android:layout_below="@+id/ll_new_password"
+            android:padding="2px"
+            android:id="@+id/ll_new_password_repeat"
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:background="@drawable/bg_edittext_user"
+            android:layout_height="wrap_content">
+            <ImageView
+                android:layout_marginLeft="@dimen/mt10"
+                android:layout_gravity="center_vertical"
+                android:src="@drawable/ic_user_login"
+                android:layout_width="@dimen/w20"
+                android:layout_height="@dimen/w20" />
+            <EditText
+                android:textSize="14sp"
+                android:layout_marginRight="@dimen/pd15"
+                android:id="@+id/et_new_password_repeat"
+                android:paddingLeft="@dimen/pd15"
+                android:hint="Nhập lại mật khẩu mới"
+                android:background="@color/text_white"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/edit_text_mini_height" />
+        </LinearLayout>
+        <Button
+            android:layout_marginTop="@dimen/mt10"
+            android:layout_below="@+id/ll_new_password_repeat"
+            android:text="Ok"
+            android:id="@+id/bt_change_pass"
+            android:layout_width="match_parent"
+            android:textStyle="bold"
+            android:textColor="@color/text_white"
+            android:background="@drawable/bg_bt_confirm_ok"
+            android:layout_height="@dimen/edit_text_mini_height" />
+    </RelativeLayout>
+</RelativeLayout>
