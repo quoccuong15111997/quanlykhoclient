@@ -2,11 +2,8 @@ package com.example.quanlykho;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Color;
-import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -30,7 +27,6 @@ import android.widget.Toast;
 import com.example.adapter.SanPhamAdapter;
 import com.example.conts.Constant;
 import com.example.model.DanhMuc;
-import com.example.model.NhanVien;
 import com.example.model.SanPham;
 
 import org.json.JSONArray;

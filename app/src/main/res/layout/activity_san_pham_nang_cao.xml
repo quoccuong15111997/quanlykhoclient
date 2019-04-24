@@ -236,24 +236,17 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:orientation="vertical">
-
-            <TextView
-                android:id="@+id/textView8"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="21dp"
-                android:textColor="#29B6F6"
-                android:text="Mã chủng loại" />
-
-            <EditText
-                android:id="@+id/edtMaDanhMucSpChiTiet"
+            <Button
+                android:id="@+id/btnHinhAnh"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
-                android:layout_marginRight="10dp"
-                android:background="@drawable/boder"
-                android:inputType="number"
-                android:textSize="18dp" />
+                android:layout_marginTop="13dp"
+                android:layout_marginLeft="@dimen/mt10"
+                android:layout_weight="1"
+                android:background="@drawable/boder_buuton_them"
+                android:text="Hình Ảnh"
+                android:layout_marginRight="@dimen/mt10"
+                android:textColor="#FAFAFA" />
         </LinearLayout>
     </LinearLayout>
     <LinearLayout

@@ -13,7 +13,9 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".ConfirmDialog"></activity>
+        <activity android:name=".ChiTietNhanSu"></activity>
+        <activity android:name="com.example.firebase.PushDataActivity"></activity>
+        <activity android:name=".ConfirmDialog" />
         <activity android:name=".SuaNhanVienActivity" />
         <activity android:name=".ThemNhanVienActivity" />
         <activity android:name=".NhanSuActivity" />

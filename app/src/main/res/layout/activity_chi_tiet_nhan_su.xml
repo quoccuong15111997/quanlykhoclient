@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".ChiTietNhanSu">
+    <RelativeLayout
+        android:id="@+id/rl_tool_bar_top"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="@color/colorBottomNav"
+        android:outlineProvider="bounds">
+
+        <ImageView
+            android:id="@+id/iv_backTaiKhoan"
+            android:layout_width="@dimen/w50"
+            android:layout_height="@dimen/w50"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            android:padding="@dimen/mt10"
+            android:src="@mipmap/ic_action_arrow_left" />
+
+        <TextView
+            android:id="@+id/tv_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="Thông tin nhân viên"
+            android:textColor="@color/text_white"
+            android:textStyle="bold"
+            android:visibility="visible"
+            android:textSize="@dimen/sp18"/>
+    </RelativeLayout>
+
+    <ImageView
+        android:id="@+id/imgNhanVien"
+        android:layout_width="@dimen/w200"
+        android:layout_height="150dp"
+        android:layout_gravity="center"
+        android:layout_margin="@dimen/w20"
+        tools:srcCompat="@tools:sample/avatars" />
+
+</LinearLayout>

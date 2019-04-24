@@ -77,6 +77,15 @@ public class NhanSuActivity extends AppCompatActivity {
                 return false;
             }
         });
+        lv_NhanVien.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Intent intent= new Intent(NhanSuActivity.this,ChiTietNhanSu.class);
+                NhanVien nhanVien=nhanVienAdapter.getItem(position);
+                intent.putExtra("NHANVIEN",nhanVien);
+                startActivity(intent);
+            }
+        });
         iv_add.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

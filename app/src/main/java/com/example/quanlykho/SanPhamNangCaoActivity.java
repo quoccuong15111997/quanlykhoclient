@@ -32,7 +32,7 @@ public class SanPhamNangCaoActivity extends AppCompatActivity {
     Intent intent;
     SanPham sanPham;
     ImageView iv_back;
-    EditText et_Ma, et_Loai, et_Ten, et_Gia, et_SoLuong, et_Size,et_MaLoai;
+    EditText et_Ma, et_Loai, et_Ten, et_Gia, et_SoLuong, et_Size;
     Button bt_Sua, bt_Xoa, bt_luu;
     Spinner spinner_TinhTrang;
     ArrayAdapter<String> tinhTrangAdapter;
@@ -124,7 +124,6 @@ public class SanPhamNangCaoActivity extends AppCompatActivity {
         et_Gia=findViewById(R.id.edtDonGiaSpChiTiet);
         et_SoLuong=findViewById(R.id.edtSoLuongSpChiTiet);
         et_Size=findViewById(R.id.edtSizeSpChiTiet);
-        et_MaLoai=findViewById(R.id.edtMaDanhMucSpChiTiet);
 
         bt_luu=findViewById(R.id.btnLuuChiTiet);
         bt_Sua=findViewById(R.id.btnSuaChiTiet);
@@ -135,14 +134,12 @@ public class SanPhamNangCaoActivity extends AppCompatActivity {
         et_Gia.setText(sanPham.getDonGia()+"");
         et_SoLuong.setText(sanPham.getSoLuong()+"");
         et_Size.setText(sanPham.getSize()+"");
-        et_MaLoai.setText(sanPham.getMaDanhMuc()+"");
 
         et_Ma.setEnabled(false);
         et_Ten.setEnabled(false);
         et_Gia.setEnabled(false);
         et_SoLuong.setEnabled(false);
         et_Size.setEnabled(false);
-        et_MaLoai.setEnabled(false);
         et_Loai.setEnabled(false);
 
         spinner_TinhTrang=findViewById(R.id.spinner_TinhTrang);
