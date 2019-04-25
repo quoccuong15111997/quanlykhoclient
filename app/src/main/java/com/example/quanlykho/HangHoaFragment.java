@@ -144,17 +144,13 @@ public class HangHoaFragment extends Fragment implements DeleteButtonOnclick {
                 if (spSua != null) {
                     xuLySuaSanPham();
                 }
-                else if(spSua.getTenSanPham().equals(edtTen.getText())==false){
-                    xuLyThemSanPham();
-                }
             }
         });
         btnThem.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(edtGia.getText()!=null && edtTen.getText()!=null && edtSoLuong.getText()!=null){
-                    xuLyThemSanPham();
-                }
+                Intent intent = new Intent(view.getContext(),ThemSanPhamActivity.class);
+                startActivity(intent);
             }
         });
         btnNangCao.setOnClickListener(new View.OnClickListener() {
@@ -189,23 +185,6 @@ public class HangHoaFragment extends Fragment implements DeleteButtonOnclick {
             xuLyTimTheoGia();
     }
 
-    private void xuLyThemSanPham() {
-        Random rd= new Random();
-        int ma=rd.nextInt(1000000);
-
-        final SanPham sp= new SanPham();
-        sp.setMaSanPham(ma);
-        sp.setTenSanPham(edtTen.getText().toString());
-        sp.setSize(40);
-        sp.setDonGia(Integer.parseInt(edtGia.getText().toString()));
-        sp.setSoLuong(Integer.parseInt(edtSoLuong.getText().toString()));
-        sp.setTinhTrang(true);
-        DanhMuc danhMuc= new DanhMuc();
-        danhMuc= (DanhMuc) spiner_ChungLoai.getSelectedItem();
-        sp.setMaDanhMuc(danhMuc.getMaDanhMuc());
-        LuuMoiSanPhamTask task= new LuuMoiSanPhamTask();
-        task.execute(sp);
-    }
 
     private void xuLySuaSanPham() {
         SanPham sanPham= new SanPham();
@@ -673,84 +652,6 @@ public class HangHoaFragment extends Fragment implements DeleteButtonOnclick {
                 String params="maSpSua="+masp +
                         "&tenSp="+ URLEncoder.encode(tensp) +
                         "&giaSp="+gia+
-                        "&soLuong="+soluong +
-                        "&tinhTrang="+tinhtrang +
-                        "&size="+size;
-                URL url= new URL(Constant.IP_ADDRESS+"SanPham/?"+params);
-                HttpURLConnection connection= (HttpURLConnection) url.openConnection();
-                connection.setRequestMethod("POST");
-                connection.setRequestProperty("Content-Type","application/json;charset=UTF-8");
-
-                InputStreamReader isr= new InputStreamReader(connection.getInputStream(),"UTF-8");
-                BufferedReader br= new BufferedReader(isr);
-                StringBuilder builder= new StringBuilder();
-                String line=null;
-                while ((line=br.readLine())!=null){
-                    builder.append(line);
-                }
-                boolean kq=builder.toString().contains("true");
-                return kq;
-
-            }
-            catch (Exception ex){
-                Log.e("LOI",ex.toString());
-            }
-            return false;
-        }
-    }
-    class LuuMoiSanPhamTask extends AsyncTask<SanPham,Void,Boolean>{
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-        }
-
-        @Override
-        protected void onPostExecute(Boolean aBoolean) {
-            super.onPostExecute(aBoolean);
-            if(aBoolean==true){
-                AlertDialog.Builder alertDialog= new AlertDialog.Builder(view.getContext());
-                alertDialog.setTitle("Lưu thành công");
-                alertDialog.setIcon(R.drawable.ic_ok);
-                alertDialog.setNegativeButton("OK",new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                    }
-                }).show();
-                xuLyTim();
-
-            }
-            else{
-                AlertDialog.Builder alertDialog= new AlertDialog.Builder(view.getContext());
-                alertDialog.setTitle("Lưu thất bại, sản phẩm đã tồn tại");
-                alertDialog.setIcon(R.drawable.ic_error);
-                alertDialog.setNegativeButton("OK",new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                    }
-                }).show();
-            }
-        }
-
-        @Override
-        protected void onProgressUpdate(Void... values) {
-            super.onProgressUpdate(values);
-        }
-
-        @Override
-        protected Boolean doInBackground(SanPham... sanPhams) {
-            try{
-                int masp=sanPhams[0].getMaSanPham();
-                String tensp=sanPhams[0].getTenSanPham();
-                int gia=sanPhams[0].getDonGia();
-                int soluong=sanPhams[0].getSoLuong();
-                boolean tinhtrang=sanPhams[0].isTinhTrang();
-                int size=sanPhams[0].getSize();
-                int madm=sanPhams[0].getMaDanhMuc();
-
-                String params="maSp="+masp +
-                        "&tenSp="+URLEncoder.encode(tensp) +
-                        "&giaSp="+gia +
-                        "&maDm="+madm+
                         "&soLuong="+soluong +
                         "&tinhTrang="+tinhtrang +
                         "&size="+size;

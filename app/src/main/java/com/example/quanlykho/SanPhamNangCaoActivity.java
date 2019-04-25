@@ -2,8 +2,18 @@ package com.example.quanlykho;
 
 import android.app.Activity;
 import android.app.Dialog;
+import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.AsyncTask;
+import android.provider.MediaStore;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -17,18 +27,37 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.conts.Constant;
+import com.example.firebase.NhanVienFirebase;
+import com.example.firebase.SanPhamFirebase;
 import com.example.model.DanhMuc;
 import com.example.model.SanPham;
+import com.google.android.gms.tasks.Continuation;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 import com.squareup.picasso.Picasso;
 
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
+import java.io.ByteArrayOutputStream;
+import java.io.FileInputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.util.ArrayList;
+
+import agency.tango.android.avatarview.loader.PicassoLoader;
 
 public class SanPhamNangCaoActivity extends AppCompatActivity {
     Intent intent;
@@ -39,12 +68,26 @@ public class SanPhamNangCaoActivity extends AppCompatActivity {
     private Dialog dialog;
     ImageView imgSanPham;
     TextView txtTenSanPham;
+    String urlImage = "";
+
+    //firebase
+    DatabaseReference mData;
+    FirebaseStorage storage = FirebaseStorage.getInstance();
+    int REQUEST_CODE_IMAGE = 1;
+    int REQUEST_CODE_IMAGE_STORAGE = 2;
+    StorageReference storageRef = storage.getReferenceFromUrl("gs://quanlykho-c05ef.appspot.com/");
+    ProgressDialog progressDialog;
+    SanPhamFirebase sanPhamFirebase;
+
+    Bitmap bitmapCamera;
+    String KEY = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_san_pham_nang_cao);
         addControls();
+        initFirebase();
         addevents();
     }
 
@@ -76,6 +119,30 @@ public class SanPhamNangCaoActivity extends AppCompatActivity {
                 xuLyLuu();
             }
         });
+        imgSanPham.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                xuLyDoi();
+            }
+        });
+    }
+
+    private void xuLyDoi() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(SanPhamNangCaoActivity.this);
+        builder.setTitle("Ảnh từ");
+        builder.setNegativeButton("Mở máy ảnh", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                startActivityForResult(intent, REQUEST_CODE_IMAGE);
+            }
+        }).setPositiveButton("Bộ sưu tập", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                Intent intent= new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.INTERNAL_CONTENT_URI);
+                startActivityForResult(intent,REQUEST_CODE_IMAGE_STORAGE);
+            }
+        }).show();
     }
 
     private void xuLyLuu() {
@@ -152,9 +219,9 @@ public class SanPhamNangCaoActivity extends AppCompatActivity {
         task.execute(sanPham.getMaDanhMuc());
 
         imgSanPham=findViewById(R.id.imgSanPham);
-        Picasso.with(SanPhamNangCaoActivity.this).load("https://firebasestorage.googleapis.com/v0/b/quanlykho-c05ef.appspot.com/o/adidas-pod-s3.1-den-full.jpg?alt=media&token=b5bdee6f-d33a-4ff8-bb6e-00b45e62e3d1").into(imgSanPham);
         txtTenSanPham=findViewById(R.id.txtTen);
         txtTenSanPham.setText(sanPham.getTenSanPham());
+
     }
     class TimDanhMucTheoMaTask extends AsyncTask<Integer,Void, DanhMuc> {
         @Override
@@ -313,5 +380,146 @@ public class SanPhamNangCaoActivity extends AppCompatActivity {
             }
             return false;
         }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        if (requestCode == REQUEST_CODE_IMAGE && resultCode == RESULT_OK && data != null) {
+            bitmapCamera = (Bitmap) data.getExtras().get("data");
+            xuLyUpload();
+        }
+        else if (requestCode == REQUEST_CODE_IMAGE_STORAGE && resultCode == RESULT_OK && data != null) {
+            Uri uri=data.getData();
+            String path=getRealPathFromURI(uri);
+            bitmapCamera=getThumbnail(path);
+            xuLyUpload();
+        }
+        super.onActivityResult(requestCode, resultCode, data);
+    }
+
+    private void xuLyUpload() {
+        progressDialog= new ProgressDialog(SanPhamNangCaoActivity.this);
+        progressDialog.setTitle("Đang xử lý");
+        progressDialog.setMessage("Vui lòng chờ...");
+        progressDialog.show();
+        String child = sanPham.getMaSanPham()+sanPham.getTenSanPham();
+        final StorageReference mountainsRef = storageRef.child(child);
+
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        bitmapCamera.compress(Bitmap.CompressFormat.PNG, 100, baos);
+        byte[] data = baos.toByteArray();
+
+        UploadTask uploadTask = mountainsRef.putBytes(data);
+        uploadTask.addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception exception) {
+                //Toast.makeText(SanPhamNangCaoActivity.this, "Thất bại", Toast.LENGTH_LONG).show();
+            }
+        }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+            @Override
+            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                //Toast.makeText(SanPhamNangCaoActivity.this, "Thành công", Toast.LENGTH_LONG).show();
+            }
+        });
+        final StorageReference ref = storageRef.child(child);
+        Task<Uri> urlTask = uploadTask.continueWithTask(new Continuation<UploadTask.TaskSnapshot, Task<Uri>>() {
+            @Override
+            public Task<Uri> then(@NonNull Task<UploadTask.TaskSnapshot> task) throws Exception {
+                if (!task.isSuccessful()) {
+                    throw task.getException();
+                }
+
+                // Continue with the task to get the download URL
+                return ref.getDownloadUrl();
+            }
+        }).addOnCompleteListener(new OnCompleteListener<Uri>() {
+            @Override
+            public void onComplete(@NonNull Task<Uri> task) {
+                if (task.isSuccessful()) {
+                    final Uri downloadUri = task.getResult();
+                    urlImage=downloadUri.toString();
+                    sanPhamFirebase.setUrlImage(urlImage);
+                    mData.child("SanPham").child(KEY).child("urlImage").setValue((downloadUri.toString()), new DatabaseReference.CompletionListener() {
+                        @Override
+                        public void onComplete(@Nullable DatabaseError databaseError, @NonNull DatabaseReference databaseReference) {
+                            if (databaseError == null) {
+                                //Toast.makeText(SanPhamNangCaoActivity.this, "Lưu databse Thành công", Toast.LENGTH_SHORT).show();
+                                Picasso.with(SanPhamNangCaoActivity.this).load(urlImage).into(imgSanPham);
+                                progressDialog.dismiss();
+                                android.app.AlertDialog.Builder alertDialog= new android.app.AlertDialog.Builder(SanPhamNangCaoActivity.this);
+                                alertDialog.setTitle("Lưu thành công");
+                                alertDialog.setIcon(R.drawable.ic_ok);
+                                alertDialog.setNegativeButton("OK",new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                    }
+                                }).show();
+                            } else {
+                                 //Toast.makeText(SanPhamNangCaoActivity.this, "Lưu dadabase thất bại", Toast.LENGTH_LONG).show();
+                            }
+                        }
+                    });
+                } else {
+                    // Handle failures
+                    // ...
+                }
+            }
+        });
+    }
+    public String getRealPathFromURI(Uri uri) {
+        Cursor cursor = getContentResolver().query(uri, null, null, null, null);
+        cursor.moveToFirst();
+        int idx = cursor.getColumnIndex(MediaStore.Images.ImageColumns.DATA);
+        return cursor.getString(idx);
+    }
+    public Bitmap getThumbnail(String pathHinh)
+    {
+        BitmapFactory.Options bounds = new BitmapFactory.Options();
+        bounds.inJustDecodeBounds = true;
+        BitmapFactory.decodeFile(pathHinh, bounds);
+        if ((bounds.outWidth == -1) || (bounds.outHeight == -1))
+            return null;
+        int originalSize = (bounds.outHeight > bounds.outWidth) ?
+                bounds.outHeight
+                : bounds.outWidth;
+        BitmapFactory.Options opts = new BitmapFactory.Options();
+        opts.inSampleSize = originalSize / 500;
+        return BitmapFactory.decodeFile(pathHinh, opts);
+    }
+    private void initFirebase() {
+        mData = FirebaseDatabase.getInstance().getReference();
+        mData.child("SanPham").addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+                sanPhamFirebase = dataSnapshot.getValue(SanPhamFirebase.class);
+                if (sanPhamFirebase.getTenSanPham().equals(sanPham.getTenSanPham())) {
+                    urlImage = sanPhamFirebase.getUrlImage();
+                    Picasso.with(SanPhamNangCaoActivity.this).load(urlImage).into(imgSanPham);
+                    KEY = dataSnapshot.getKey();
+                    Picasso.with(SanPhamNangCaoActivity.this).load(urlImage).into(imgSanPham);
+                }
+            }
+
+            @Override
+            public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+
+            }
+
+            @Override
+            public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
+
+            }
+
+            @Override
+            public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
     }
 }
