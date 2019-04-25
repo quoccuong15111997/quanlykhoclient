@@ -14,7 +14,7 @@
         android:outlineProvider="bounds">
 
         <ImageView
-            android:id="@+id/iv_backTaiKhoan"
+            android:id="@+id/iv_backNhanVien"
             android:layout_width="@dimen/w50"
             android:layout_height="@dimen/w50"
             android:layout_alignParentLeft="true"
@@ -34,12 +34,33 @@
             android:textSize="@dimen/sp18"/>
     </RelativeLayout>
 
-    <ImageView
-        android:id="@+id/imgNhanVien"
-        android:layout_width="@dimen/w200"
+    <agency.tango.android.avatarview.views.AvatarView
+        android:layout_width="150dp"
         android:layout_height="150dp"
+        app:av_border_color="@android:color/white"
+        android:layout_marginTop="@dimen/w5"
+        app:av_border_width="4dp"
+        app:av_text_size_percentage="35"
         android:layout_gravity="center"
-        android:layout_margin="@dimen/w20"
-        tools:srcCompat="@tools:sample/avatars" />
+        android:id="@+id/avatar_view_example"/>
 
+    <TextView
+        android:id="@+id/txtName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="5dp"
+        android:text="Nguyễn Quốc Cường"
+        android:textColor="@color/colorBlack"
+        android:textSize="24sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/txtChucVu"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:text="Quản lý"
+        android:textColor="@color/colorBlack"
+        android:textSize="20sp" />
 </LinearLayout>

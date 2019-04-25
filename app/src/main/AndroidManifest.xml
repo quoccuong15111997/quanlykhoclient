@@ -4,17 +4,21 @@
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_app50"
         android:label="@string/app_name"
+        android:largeHeap="true"
         android:roundIcon="@mipmap/ic_app"
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".ChiTietNhanSu"></activity>
-        <activity android:name="com.example.firebase.PushDataActivity"></activity>
+        <activity android:name=".ImageViewActivity"></activity>
+        <activity android:name=".ChiTietNhanSu" />
+        <activity android:name="com.example.firebase.PushDataActivity" />
         <activity android:name=".ConfirmDialog" />
         <activity android:name=".SuaNhanVienActivity" />
         <activity android:name=".ThemNhanVienActivity" />

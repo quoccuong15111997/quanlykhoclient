@@ -1,0 +1,10 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android" >
+    <item
+        android:id="@+id/itemXem"
+        android:title="Xem ảnh đại diện">
+    </item>
+    <item
+        android:id="@+id/itemDoi"
+        android:title="Chọn ảnh mới">
+    </item>
+</menu>
