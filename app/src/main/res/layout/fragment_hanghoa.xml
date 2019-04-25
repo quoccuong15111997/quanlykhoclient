@@ -301,15 +301,6 @@
                 android:background="@drawable/boder_buuton_them"
                 android:text="Thêm"
                 android:textColor="#FAFAFA" />
-            <Button
-                android:id="@+id/btnChiTiet"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="5dp"
-                android:layout_weight="1"
-                android:background="@drawable/boder_buuton_nangcao"
-                android:text="Chi tiết"
-                android:textColor="#FAFAFA" />
         </LinearLayout>
 
     </LinearLayout>

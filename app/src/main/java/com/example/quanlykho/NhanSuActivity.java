@@ -7,6 +7,8 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.AsyncTask;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -26,7 +28,13 @@ import android.widget.Toast;
 
 import com.example.adapter.NhanVienAdapter;
 import com.example.conts.Constant;
+import com.example.firebase.NhanVienFirebase;
 import com.example.model.NhanVien;
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -37,6 +45,8 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.util.ArrayList;
+
+import agency.tango.android.avatarview.loader.PicassoLoader;
 
 public class NhanSuActivity extends AppCompatActivity {
     ListView lv_NhanVien;
@@ -54,6 +64,10 @@ public class NhanSuActivity extends AppCompatActivity {
     int viTri=0;
     ProgressDialog progressDialog;
     AlertDialog.Builder alertDialog;
+
+    //firebase
+    DatabaseReference mData = FirebaseDatabase.getInstance().getReference();
+    String KEY="";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,6 +87,8 @@ public class NhanSuActivity extends AppCompatActivity {
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
                 viTri=position;
+                NhanVien nhanVienXoa=nhanVienAdapter.getItem(position);
+                initFirebase(nhanVienXoa);
                 registerForContextMenu(lv_NhanVien);
                 return false;
             }
@@ -236,11 +252,14 @@ public class NhanSuActivity extends AppCompatActivity {
     }
     public void XacNhanXoa(View view) {
         dialog.dismiss();
+        mData.child("NhanVien").child(KEY).removeValue();
         XoaNhanVienTask task= new XoaNhanVienTask();
         NhanVien nv;
         nv=nhanVienAdapter.getItem(viTri);
 
         task.execute(nv.getMaNhanVien());
+
+
     }
 
     public void XacNhanHuy(View view) {
@@ -347,7 +366,8 @@ public class NhanSuActivity extends AppCompatActivity {
                 alertDialog= new AlertDialog.Builder(NhanSuActivity.this);
                 alertDialog.setTitle("Xóa thành công");
                 alertDialog.setIcon(R.drawable.ic_ok);
-                alertDialog.setNegativeButton("OK",new DialogInterface.OnClickListener() {
+                alertDialog.setNegativeButton("OK",new DialogInterface.OnClickListener()
+                {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                     }
@@ -647,5 +667,37 @@ public class NhanSuActivity extends AppCompatActivity {
             }
             return null;
         }
+    }
+    private void initFirebase(final NhanVien nhanVienXoa) {
+        mData.child("NhanVien").addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+                NhanVienFirebase nhanVienFirebase = dataSnapshot.getValue(NhanVienFirebase.class);
+                if (nhanVienFirebase.getUserName().equals(nhanVienXoa.getUserName()) == true) {
+                    KEY = dataSnapshot.getKey();
+                }
+            }
+
+            @Override
+            public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+
+            }
+
+            @Override
+            public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
+
+            }
+
+            @Override
+            public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
     }
 }

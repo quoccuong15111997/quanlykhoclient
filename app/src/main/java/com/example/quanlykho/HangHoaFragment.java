@@ -25,6 +25,7 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.example.adapter.SanPhamAdapter;
+import com.example.adapterimpl.DeleteButtonOnclick;
 import com.example.conts.Constant;
 import com.example.model.DanhMuc;
 import com.example.model.SanPham;
@@ -40,11 +41,11 @@ import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Random;
 
-public class HangHoaFragment extends Fragment {
+public class HangHoaFragment extends Fragment implements DeleteButtonOnclick {
     static View view;
     EditText edtTen, edtGia, edtSoLuong;
     Spinner spiner_ChungLoai, spinner_ChucNang;
-    Button btnTim, btnChiTiet, btnThem, btnSua, btnLuu, btnNangCao;
+    Button btnTim, btnThem, btnSua, btnLuu, btnNangCao;
     ArrayAdapter chucNangAdapter,chungLoaiAdapter;
     static SanPhamAdapter sanPhamAdapter;
     ListView lvSanPham;
@@ -108,6 +109,9 @@ public class HangHoaFragment extends Fragment {
                 edtSoLuong.setText(spSua.getSoLuong()+"");
                 edtSoLuong.setEnabled(false);
 
+                Intent intent= new Intent(getContext(),SanPhamNangCaoActivity.class);
+                intent.putExtra("SANPHAM",spSua);
+                startActivityForResult(intent,1);
 
             }
         });
@@ -150,19 +154,6 @@ public class HangHoaFragment extends Fragment {
             public void onClick(View v) {
                 if(edtGia.getText()!=null && edtTen.getText()!=null && edtSoLuong.getText()!=null){
                     xuLyThemSanPham();
-                }
-            }
-        });
-        btnChiTiet.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (spSua==null){
-                    Toast.makeText(view.getContext(), "Vui lòng chọn sản phẩm", Toast.LENGTH_LONG).show();
-                }
-                else {
-                        Intent intent= new Intent(getContext(),SanPhamNangCaoActivity.class);
-                        intent.putExtra("SANPHAM",spSua);
-                        startActivityForResult(intent,1);
                 }
             }
         });
@@ -253,7 +244,6 @@ public class HangHoaFragment extends Fragment {
         edtTen = view.findViewById(R.id.edtTenSanPham);
 
         btnLuu = view.findViewById(R.id.btnLuu);
-        btnChiTiet = view.findViewById(R.id.btnChiTiet);
         btnSua = view.findViewById(R.id.btnSua);
         btnThem = view.findViewById(R.id.btnThem);
         btnTim = view.findViewById(R.id.btnTim);
@@ -279,6 +269,7 @@ public class HangHoaFragment extends Fragment {
         dsSanPham = new ArrayList<>();
         lvSanPham = view.findViewById(R.id.lvSanPham);
         sanPhamAdapter = new SanPhamAdapter(this.view.getContext(), R.layout.row_sanpham, dsSanPham);
+        sanPhamAdapter.isClicked(this);
         lvSanPham.setAdapter(sanPhamAdapter);
 
         llNangCao=view.findViewById(R.id.ll_nang_cao);
@@ -355,6 +346,14 @@ public class HangHoaFragment extends Fragment {
         SanPham sanPham=sanPhamAdapter.getItem(viTriSanPham);
         sanPhamAdapter.remove(sanPham);
         sanPhamAdapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void deleteOnclick(int position) {
+        viTriSanPham=position;
+        SanPham sanPham=sanPhamAdapter.getItem(position);
+        maSanPhamXoa=sanPham.getMaSanPham();
+        xuLyXacNhanXoaSanPham();
     }
 
     class LayDanhSachDanhMucTask extends AsyncTask<Void, Void, ArrayList<DanhMuc>> {

@@ -18,7 +18,9 @@
         android:usesCleartextTraffic="true">
         <activity android:name=".ImageViewActivity"></activity>
         <activity android:name=".ChiTietNhanSu" />
-        <activity android:name="com.example.firebase.PushDataActivity" />
+        <activity android:name="com.example.firebase.PushDataActivity">
+
+        </activity>
         <activity android:name=".ConfirmDialog" />
         <activity android:name=".SuaNhanVienActivity" />
         <activity android:name=".ThemNhanVienActivity" />

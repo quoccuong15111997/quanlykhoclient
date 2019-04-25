@@ -39,7 +39,7 @@
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
             android:padding="@dimen/mt10"
-            android:src="@drawable/ic_add" />
+            android:src="@drawable/ic_addaccount" />
     </RelativeLayout>
     <TextView
         android:layout_width="match_parent"

@@ -13,11 +13,13 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.conts.Constant;
 import com.example.model.DanhMuc;
 import com.example.model.SanPham;
+import com.squareup.picasso.Picasso;
 
 import org.json.JSONObject;
 
@@ -34,9 +36,9 @@ public class SanPhamNangCaoActivity extends AppCompatActivity {
     ImageView iv_back;
     EditText et_Ma, et_Loai, et_Ten, et_Gia, et_SoLuong, et_Size;
     Button bt_Sua, bt_Xoa, bt_luu;
-    Spinner spinner_TinhTrang;
-    ArrayAdapter<String> tinhTrangAdapter;
     private Dialog dialog;
+    ImageView imgSanPham;
+    TextView txtTenSanPham;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -93,7 +95,6 @@ public class SanPhamNangCaoActivity extends AppCompatActivity {
         et_Gia.setEnabled(true);
         et_SoLuong.setEnabled(true);
         et_Size.setEnabled(true);
-        spinner_TinhTrang.setEnabled(true);
     }
 
     private void xuLyXoa() {
@@ -142,19 +143,18 @@ public class SanPhamNangCaoActivity extends AppCompatActivity {
         et_Size.setEnabled(false);
         et_Loai.setEnabled(false);
 
-        spinner_TinhTrang=findViewById(R.id.spinner_TinhTrang);
-        tinhTrangAdapter=new ArrayAdapter<>(SanPhamNangCaoActivity.this,android.R.layout.simple_spinner_item);
-        tinhTrangAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinner_TinhTrang.setAdapter(tinhTrangAdapter);
+
         ArrayList<String> dstinhTrang= new ArrayList<>();
         dstinhTrang.add("Còn hàng");
         dstinhTrang.add("Hết hàng");
-        tinhTrangAdapter.addAll(dstinhTrang);
-        tinhTrangAdapter.notifyDataSetChanged();
-        spinner_TinhTrang.setEnabled(false);
 
         TimDanhMucTheoMaTask task= new TimDanhMucTheoMaTask();
         task.execute(sanPham.getMaDanhMuc());
+
+        imgSanPham=findViewById(R.id.imgSanPham);
+        Picasso.with(SanPhamNangCaoActivity.this).load("https://firebasestorage.googleapis.com/v0/b/quanlykho-c05ef.appspot.com/o/adidas-pod-s3.1-den-full.jpg?alt=media&token=b5bdee6f-d33a-4ff8-bb6e-00b45e62e3d1").into(imgSanPham);
+        txtTenSanPham=findViewById(R.id.txtTen);
+        txtTenSanPham.setText(sanPham.getTenSanPham());
     }
     class TimDanhMucTheoMaTask extends AsyncTask<Integer,Void, DanhMuc> {
         @Override
