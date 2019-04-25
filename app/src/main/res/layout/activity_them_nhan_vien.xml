@@ -34,6 +34,16 @@
             android:visibility="visible"
             android:textSize="@dimen/sp18"/>
     </RelativeLayout>
+    <agency.tango.android.avatarview.views.AvatarView
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        app:av_border_color="@android:color/white"
+        android:layout_marginTop="@dimen/w5"
+        app:av_border_width="4dp"
+        app:av_text_size_percentage="35"
+        android:layout_gravity="center"
+        android:id="@+id/avatar"/>
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
