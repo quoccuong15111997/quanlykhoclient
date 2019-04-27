@@ -71,6 +71,8 @@ public class HangHoaFragments extends Fragment implements DeleteButtonOnclick {
     ArrayList<SanPham> dsTatCaSanPham = new ArrayList<>();
     ProgressDialog progressDialog;
     static String KEY="";
+    static String KEY_SPXOA="";
+    int REQUEST_CODE_ADD=100;
 
     DatabaseReference mData= FirebaseDatabase.getInstance().getReference();
 
@@ -87,7 +89,7 @@ public class HangHoaFragments extends Fragment implements DeleteButtonOnclick {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(view.getContext(), ThemSanPhamActivity.class);
-                startActivity(intent);
+                startActivityForResult(intent,REQUEST_CODE_ADD);
             }
         });
         imgSeach.setOnClickListener(new View.OnClickListener() {
@@ -337,6 +339,35 @@ public class HangHoaFragments extends Fragment implements DeleteButtonOnclick {
     public boolean onContextItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.itemXoa:
+                mData.child("SanPham").addChildEventListener(new ChildEventListener() {
+                    @Override
+                    public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+                        SanPhamFirebase sanPhamFirebase=dataSnapshot.getValue(SanPhamFirebase.class);
+                        if(sanPhamFirebase.getMaSanPham()==maSanPhamXoa){
+                            KEY_SPXOA=dataSnapshot.getKey();
+                        }
+                    }
+
+                    @Override
+                    public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+
+                    }
+
+                    @Override
+                    public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
+
+                    }
+
+                    @Override
+                    public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                    }
+                });
                 xuLyXacNhanXoaSanPham();
                 break;
             case R.id.itemSua:
@@ -348,7 +379,7 @@ public class HangHoaFragments extends Fragment implements DeleteButtonOnclick {
 
     private void xuLySuaSanPhamChitiet() {
         SanPham sanPhamChon = sanPhamAdapter.getItem(viTriSanPham);
-        DanhMuc danhMuc = (DanhMuc) spiner_ChungLoai.getSelectedItem();
+        DanhMuc danhMuc = (DanhMuc) spiner_ChungLoai.getItemAtPosition(positionDanhMuc);
         sanPhamChon.setMaDanhMuc(danhMuc.getMaDanhMuc());
         Intent intent = new Intent(getContext(), SanPhamNangCaoActivity.class);
         intent.putExtra("SANPHAM", sanPhamChon);
@@ -372,6 +403,35 @@ public class HangHoaFragments extends Fragment implements DeleteButtonOnclick {
         viTriSanPham = position;
         SanPham sanPham = sanPhamAdapter.getItem(position);
         maSanPhamXoa = sanPham.getMaSanPham();
+        mData.child("SanPham").addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+                SanPhamFirebase sanPhamFirebase=dataSnapshot.getValue(SanPhamFirebase.class);
+                if(sanPhamFirebase.getMaSanPham()==maSanPhamXoa){
+                    KEY_SPXOA=dataSnapshot.getKey();
+                }
+            }
+
+            @Override
+            public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+
+            }
+
+            @Override
+            public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
+
+            }
+
+            @Override
+            public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
         xuLyXacNhanXoaSanPham();
     }
 
@@ -862,6 +922,11 @@ public class HangHoaFragments extends Fragment implements DeleteButtonOnclick {
                 xuLyTim();
             }
         }
+        if (requestCode == REQUEST_CODE_ADD) {
+            if (resultCode == Activity.RESULT_OK) {
+                xuLyTim();
+            }
+        }
     }
 
     static class XoaSanPhamTask extends AsyncTask<Integer, Void, Boolean> {
@@ -874,6 +939,7 @@ public class HangHoaFragments extends Fragment implements DeleteButtonOnclick {
         protected void onPostExecute(Boolean aBoolean) {
             super.onPostExecute(aBoolean);
             if (aBoolean == true) {
+                xuLyXoaSanPhamFirebase();
                 xuLyCapNhatDSSanPHamSauKhiXoa();
                 AlertDialog.Builder alertDialog = new AlertDialog.Builder(view.getContext());
                 alertDialog.setTitle("Xóa thành công");
@@ -883,6 +949,7 @@ public class HangHoaFragments extends Fragment implements DeleteButtonOnclick {
                     public void onClick(DialogInterface dialog, int which) {
                     }
                 }).show();
+
             } else {
                 AlertDialog.Builder alertDialog = new AlertDialog.Builder(view.getContext());
                 alertDialog.setTitle("Xóa thất bại");
@@ -893,6 +960,11 @@ public class HangHoaFragments extends Fragment implements DeleteButtonOnclick {
                     }
                 }).show();
             }
+        }
+
+        private void xuLyXoaSanPhamFirebase() {
+            DatabaseReference databaseReference=FirebaseDatabase.getInstance().getReference();
+            databaseReference.child("SanPham").child(KEY_SPXOA).removeValue();
         }
 
         @Override

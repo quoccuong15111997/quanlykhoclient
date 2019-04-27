@@ -34,6 +34,25 @@
                 android:visibility="visible"
                 android:textSize="@dimen/sp18"/>
         </RelativeLayout>
+    <agency.tango.android.avatarview.views.AvatarView
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        app:av_border_color="@android:color/white"
+        android:layout_marginTop="@dimen/w5"
+        app:av_border_width="4dp"
+        app:av_text_size_percentage="35"
+        android:layout_gravity="center"
+        android:id="@+id/avatar_view"/>
+
+    <TextView
+        android:id="@+id/txtTen"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="aaaaaaa"
+        android:textAlignment="center"
+        android:textColor="@color/colorBlack"
+        android:textSize="@dimen/sp18"
+        android:textStyle="bold" />
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -93,7 +112,6 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
         android:orientation="horizontal">
 
         <LinearLayout
@@ -149,7 +167,6 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
         android:orientation="horizontal">
 
         <LinearLayout
@@ -205,7 +222,6 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
         android:orientation="horizontal">
 
         <LinearLayout
@@ -268,7 +284,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="5dp"
-            android:layout_marginTop="17dp"
+            android:layout_marginTop="5dp"
             android:layout_marginRight="7dp"
             android:layout_weight="1"
             android:background="@drawable/boder_buuton_tim"
@@ -279,7 +295,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="5dp"
-            android:layout_marginTop="17dp"
+            android:layout_marginTop="5dp"
             android:layout_marginRight="7dp"
             android:layout_weight="1"
             android:background="@drawable/boder_buuton_nangcao"
@@ -288,7 +304,7 @@
     </LinearLayout>
     <Button
         android:id="@+id/btnLuu"
-        android:layout_marginTop="@dimen/mt10"
+        android:layout_marginTop="5dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginRight="5dp"

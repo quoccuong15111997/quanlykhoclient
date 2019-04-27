@@ -52,7 +52,6 @@ public class MainActivity extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-       //getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,new HangHoaFragment()).commit();
         getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,new HangHoaFragments()).commit();
         toolbar.setTitle("Quản lý hàng hóa");
         addControls();
@@ -111,18 +110,18 @@ public class MainActivity extends AppCompatActivity
         int id = item.getItemId();
 
         if (id == R.id.nav_HangHoa) {
-           //getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,new HangHoaFragment()).commit();
             getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,new HangHoaFragments()).commit();
             toolbar.setTitle("Quản lý hàng hóa");
-            setSupportActionBar(toolbar);
 
         } else if (id == R.id.nav_DanhMuc) {
             getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,new DanhMucFragment()).commit();
+            toolbar.setTitle("Quản lý danh mục");
         }
 
         else if (id == R.id.nav_NhanSu) {
             if (nhanVien.getRole() == 0) {
                 Intent intent= new Intent(MainActivity.this,NhanSuActivity.class);
+                intent.putExtra("NHANVIEN",nhanVien);
                 startActivity(intent);
             }
             else

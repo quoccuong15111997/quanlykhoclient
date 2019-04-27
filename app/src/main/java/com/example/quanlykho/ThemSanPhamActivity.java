@@ -1,5 +1,6 @@
 package com.example.quanlykho;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
@@ -97,6 +98,9 @@ public class ThemSanPhamActivity extends AppCompatActivity {
         iv_back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Intent returnIntent = new Intent();
+                returnIntent.putExtra("result",100);
+                setResult(Activity.RESULT_OK,returnIntent);
                 finish();
             }
         });
@@ -171,6 +175,8 @@ public class ThemSanPhamActivity extends AppCompatActivity {
 
         imgSanPham=findViewById(R.id.imgSanPham);
         txtTenSanPham=findViewById(R.id.txtTen);
+
+        Picasso.with(ThemSanPhamActivity.this).load("https://raw.githubusercontent.com/quoccuong151197/FirebaseStorage/master/app/src/main/res/drawable/ic.png").into(imgSanPham);
 
         spinner_danhMuc=findViewById(R.id.spinner_ChungLoai);
         danhMucAdapter= new ArrayAdapter<>(ThemSanPhamActivity.this,android.R.layout.simple_spinner_item);

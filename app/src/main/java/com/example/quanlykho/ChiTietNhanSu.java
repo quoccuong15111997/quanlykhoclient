@@ -18,6 +18,7 @@ import android.view.ContextMenu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.example.firebase.NhanVienFirebase;
@@ -47,12 +48,15 @@ public class ChiTietNhanSu extends AppCompatActivity {
     Intent intent;
     DatabaseReference mData;
     ArrayList<NhanVienFirebase> dsNhanVienFirebase = new ArrayList<>();
-    NhanVien nhanVien;
+    NhanVien nhanVien,nhanVienLogin;
 
     AvatarView avatarView;
     IImageLoader imageLoader;
     TextView txtName, txtChucVu;
-    ImageView iv_back;
+    TextView txtPhone, txtDiaChi, txtEmail, txtUsername;
+    ImageView iv_back, imgPhone,imgEmail;
+
+    LinearLayout llPhone, llEmail, llDiaChi;
 
 
     NhanVienFirebase nhanVienFirebase;
@@ -74,6 +78,7 @@ public class ChiTietNhanSu extends AppCompatActivity {
         setContentView(R.layout.activity_chi_tiet_nhan_su);
         intent = getIntent();
         nhanVien = (NhanVien) intent.getSerializableExtra("NHANVIEN");
+        nhanVienLogin= (NhanVien) intent.getSerializableExtra("NHANVIENLOGIN");
         addControls();
         addEvents();
         initFirebase();
@@ -130,6 +135,74 @@ public class ChiTietNhanSu extends AppCompatActivity {
                 registerForContextMenu(avatarView);
             }
         });
+        llPhone.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AlertDialog.Builder builder= new AlertDialog.Builder(ChiTietNhanSu.this);
+                builder.setTitle("Thực hiện");
+                builder.setNegativeButton("Gọi", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        xuLyGoiDienThoai();
+                    }
+                }).setPositiveButton("Gửi tin nhắn", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        xuLyGuiSMS();
+                    }
+                }).show();
+            }
+        });
+        llEmail.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String email =nhanVien.getEmail();
+                String subject="CÔNG TY PHÂN PHỐI GIÀY TP HCM_SEND BY ADMIN_"+nhanVienLogin.getTenNhanVien();
+                String body="";
+                String chooserTitle ="abcxyz";
+                        Uri uri = Uri.parse("mailto:" + email)
+                        .buildUpon()
+                        .appendQueryParameter("subject", subject)
+                        .appendQueryParameter("body", body)
+                                .appendQueryParameter("to",email)
+
+                        .build();
+
+                Intent emailIntent = new Intent(Intent.ACTION_SENDTO, uri);
+                startActivity(Intent.createChooser(emailIntent, chooserTitle));
+            }
+        });
+        llDiaChi.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                xuLyMoGoogleMaps();
+            }
+        });
+    }
+
+    private void xuLyMoGoogleMaps() {
+        Uri gmmIntentUri = Uri.parse("geo:0,0?q="+nhanVien.getDiaChi());
+        Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
+        mapIntent.setPackage("com.google.android.apps.maps");
+        if (mapIntent.resolveActivity(getPackageManager()) != null) {
+            startActivity(mapIntent);
+        }
+    }
+
+    private void xuLyGuiSMS() {
+        String phone="0"+nhanVien.getPhone();
+        Uri uri = Uri.parse("smsto:"+phone);
+        Intent it = new Intent(Intent.ACTION_SENDTO, uri);
+        it.putExtra("sms_body", "Tin nhắn được gửi từ: "+nhanVienLogin.getTenNhanVien());
+        startActivity(it);
+    }
+
+    private void xuLyGoiDienThoai() {
+        String phone="0"+nhanVien.getPhone();
+        Uri uri=Uri.parse("tel:"+phone);
+        Intent intent= new Intent(Intent.ACTION_DIAL,uri);
+        intent.setData(uri);
+        startActivity(intent);
     }
 
     private void addControls() {
@@ -143,6 +216,22 @@ public class ChiTietNhanSu extends AppCompatActivity {
         } else if (nhanVien.getRole() == 1) {
             txtChucVu.setText("Nhân viên");
         }
+        txtPhone=findViewById(R.id.txtPhone);
+        txtEmail=findViewById(R.id.txtEmail);
+        txtDiaChi=findViewById(R.id.txtDiaChi);
+        txtUsername=findViewById(R.id.txtUsername);
+
+        txtPhone.setText("0"+nhanVien.getPhone()+"");
+        txtEmail.setText(nhanVien.getEmail());
+        txtDiaChi.setText(nhanVien.getDiaChi());
+        txtUsername.setText(nhanVien.getUserName());
+
+        imgPhone=findViewById(R.id.imgPhone);
+        imgEmail=findViewById(R.id.imgEmail);
+
+        llPhone=findViewById(R.id.llPhone);
+        llEmail=findViewById(R.id.llEmail);
+        llDiaChi=findViewById(R.id.llDiaChi);
     }
 
     @Override

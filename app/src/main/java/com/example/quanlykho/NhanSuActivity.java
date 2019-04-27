@@ -62,6 +62,7 @@ public class NhanSuActivity extends AppCompatActivity {
     int viTri=0;
     ProgressDialog progressDialog;
     AlertDialog.Builder alertDialog;
+    NhanVien nhanVienLogin;
 
     //firebase
     DatabaseReference mData = FirebaseDatabase.getInstance().getReference();
@@ -97,6 +98,7 @@ public class NhanSuActivity extends AppCompatActivity {
                 Intent intent= new Intent(NhanSuActivity.this,ChiTietNhanSu.class);
                 NhanVien nhanVien=nhanVienAdapter.getItem(position);
                 intent.putExtra("NHANVIEN",nhanVien);
+                intent.putExtra("NHANVIENLOGIN",nhanVienLogin);
                 startActivity(intent);
             }
         });
@@ -184,6 +186,9 @@ public class NhanSuActivity extends AppCompatActivity {
     }
 
     private void addControls() {
+        Intent intent=getIntent();
+        nhanVienLogin= (NhanVien) intent.getSerializableExtra("NHANVIEN");
+
         dsNhanVien = new ArrayList<>();
         lv_NhanVien = findViewById(R.id.lv_NhanVien);
         nhanVienAdapter = new NhanVienAdapter(NhanSuActivity.this, R.layout.item_row_nhanvien, dsNhanVien);

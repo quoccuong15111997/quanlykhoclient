@@ -17,7 +17,7 @@ public class ConfirmDialog extends DialogFragment {
         builder.setMessage("Bạn chắc chắn muốn xóa ?").setPositiveButton("Xóa", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                HangHoaFragment.xuLyXoaSanPham();
+                HangHoaFragments.xuLyXoaSanPham();
             }
         }).setNegativeButton("Không", new DialogInterface.OnClickListener() {
             @Override
