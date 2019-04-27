@@ -3,7 +3,6 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#BBDEFB"
     xmlns:tools="http://schemas.android.com/tools">
     <LinearLayout
         android:layout_width="match_parent"
@@ -28,11 +27,13 @@
             android:layout_margin="@dimen/mt10"
             android:id="@+id/imgSortClicked"
             android:src="@drawable/ic_sorttouch"/>
+
         <EditText
+            android:id="@+id/edtTim"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/edtTim"
-            android:layout_weight="1"/>
+            android:layout_weight="1"
+            android:hint="Nhập tên sản phẩm" />
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -40,20 +41,32 @@
             android:layout_margin="@dimen/mt10"
             android:src="@drawable/search_30px"/>
     </LinearLayout>
-    <Spinner
-        android:id="@+id/spinner_TraCuu"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="40dp"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
-        android:background="@drawable/boder"/>
-    <Spinner
-        android:id="@+id/spinner_ChungLoai"
-        android:layout_width="match_parent"
-        android:layout_height="40dp"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
-        android:background="@drawable/boder"/>
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/w5"
+        android:orientation="horizontal">
+        <TextView
+            android:id="@+id/txtLocTheo"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/pd50"
+            android:layout_weight="1"
+            android:text="Lọc theo"
+            android:background="@drawable/border_txt_select"
+            android:textSize="@dimen/sp18"
+            android:textAlignment="center"
+            android:layout_marginLeft="@dimen/mt10"
+            android:textColor="@color/colorBlack"/>
+        <Spinner
+            android:id="@+id/spinner_TraCuu"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_weight="1"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:background="@drawable/boder"/>
+    </LinearLayout>
+
     <LinearLayout
         android:id="@+id/llGia"
         android:layout_width="match_parent"
@@ -104,6 +117,16 @@
             android:background="@drawable/boder"/>
     </LinearLayout>
     </LinearLayout>
+
+    <Spinner
+        android:id="@+id/spinner_ChungLoai"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="@dimen/w5"
+        android:layout_marginRight="10dp"
+        android:background="@drawable/boder" />
+
     <LinearLayout
 
         android:layout_width="match_parent"

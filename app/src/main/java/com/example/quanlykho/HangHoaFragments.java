@@ -2,6 +2,7 @@ package com.example.quanlykho;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
@@ -22,13 +23,20 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.adapter.SanPhamAdapter;
 import com.example.adapterimpl.DeleteButtonOnclick;
 import com.example.conts.Constant;
+import com.example.firebase.SanPhamFirebase;
 import com.example.model.DanhMuc;
 import com.example.model.SanPham;
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -48,9 +56,11 @@ public class HangHoaFragments extends Fragment implements DeleteButtonOnclick {
     ImageView imgSeach, imgSort, imgSortClicked, imgAdd;
     EditText edtTim;
     SanPham spSua;
+    TextView txtLoc;
     static int positionChucNang = 0;
     static int maSanPhamXoa = 0;
     static int viTriSanPham = 0;
+    static int positionDanhMuc=0;
     LinearLayout llGia;
     int chucNangChon = 0;
     Spinner spinner_GiaMin, spinner_GiaMax;
@@ -59,6 +69,10 @@ public class HangHoaFragments extends Fragment implements DeleteButtonOnclick {
     Spinner spiner_ChungLoai, spinner_ChucNang;
     ArrayAdapter chungLoaiAdapter, chucNangAdapter;
     ArrayList<SanPham> dsTatCaSanPham = new ArrayList<>();
+    ProgressDialog progressDialog;
+    static String KEY="";
+
+    DatabaseReference mData= FirebaseDatabase.getInstance().getReference();
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -88,6 +102,7 @@ public class HangHoaFragments extends Fragment implements DeleteButtonOnclick {
                 spinner_ChucNang.setVisibility(View.VISIBLE);
                 imgSort.setVisibility(View.GONE);
                 imgSortClicked.setVisibility(View.VISIBLE);
+                txtLoc.setVisibility(View.VISIBLE);
             }
         });
         imgSortClicked.setOnClickListener(new View.OnClickListener() {
@@ -96,17 +111,14 @@ public class HangHoaFragments extends Fragment implements DeleteButtonOnclick {
                 spinner_ChucNang.setVisibility(View.GONE);
                 imgSort.setVisibility(View.VISIBLE);
                 imgSortClicked.setVisibility(View.GONE);
+                spiner_ChungLoai.setVisibility(View.GONE);
+                txtLoc.setVisibility(View.GONE);
             }
         });
         lvSanPham.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                spSua = dsSanPham.get(position);
-                DanhMuc danhMuc= (DanhMuc) spiner_ChungLoai.getSelectedItem();
-                spSua.setMaDanhMuc(danhMuc.getMaDanhMuc());
-                Intent intent = new Intent(getContext(), SanPhamNangCaoActivity.class);
-                intent.putExtra("SANPHAM", spSua);
-                startActivityForResult(intent, 1);
+                xuLyMoManHinhChiTiet(position);
 
             }
         });
@@ -141,6 +153,58 @@ public class HangHoaFragments extends Fragment implements DeleteButtonOnclick {
                 positionChucNang = 0;
             }
         });
+        spiner_ChungLoai.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                positionDanhMuc=position;
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+    }
+
+    private void xuLyMoManHinhChiTiet(int position) {
+        spSua = dsSanPham.get(position);
+        DanhMuc danhMuc= (DanhMuc) spiner_ChungLoai.getItemAtPosition(positionDanhMuc);
+        spSua.setMaDanhMuc(danhMuc.getMaDanhMuc());
+        mData.child("SanPham").addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+                SanPhamFirebase sanPhamFirebase = dataSnapshot.getValue(SanPhamFirebase.class);
+                if (sanPhamFirebase.getTenSanPham().equals(spSua.getTenSanPham())) {
+                    KEY = dataSnapshot.getKey();
+                }
+            }
+
+            @Override
+            public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+
+            }
+
+            @Override
+            public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
+
+            }
+
+            @Override
+            public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
+
+        Intent intent = new Intent(getContext(), SanPhamNangCaoActivity.class);
+        intent.putExtra("SANPHAM", spSua);
+        intent.putExtra("KEY",KEY);
+        startActivityForResult(intent, 1);
     }
 
     private void xuLyXacNhanXoaSanPham() {
@@ -168,7 +232,7 @@ public class HangHoaFragments extends Fragment implements DeleteButtonOnclick {
     }
 
     private void xuLyTimTheoLoai() {
-        DanhMuc dm = (DanhMuc) spiner_ChungLoai.getSelectedItem();
+        DanhMuc dm = (DanhMuc) spiner_ChungLoai.getItemAtPosition(positionDanhMuc);
         TraCuuSanPhamTheoMaDmTask task = new TraCuuSanPhamTheoMaDmTask();
         task.execute(dm.getMaDanhMuc());
     }
@@ -232,6 +296,13 @@ public class HangHoaFragments extends Fragment implements DeleteButtonOnclick {
         dsChucNang.add("Giá");
         chucNangAdapter.addAll(dsChucNang);
         spinner_ChucNang.setAdapter(chucNangAdapter);
+
+        txtLoc=view.findViewById(R.id.txtLocTheo);
+        txtLoc.setVisibility(View.GONE);
+
+        progressDialog= new ProgressDialog(view.getContext());
+        progressDialog.setTitle("Đang xử lý");
+        progressDialog.setMessage("Vui lòng chờ....");
 
         LayDanhSachDanhMucTask task = new LayDanhSachDanhMucTask();
         task.execute();
@@ -367,11 +438,13 @@ public class HangHoaFragments extends Fragment implements DeleteButtonOnclick {
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
+            progressDialog.show();
         }
 
         @Override
         protected void onPostExecute(ArrayList<SanPham> sanPhams) {
             super.onPostExecute(sanPhams);
+            progressDialog.dismiss();
             if (sanPhams != null) {
                 dsSanPham.clear();
                 dsSanPham.addAll(sanPhams);
@@ -507,11 +580,13 @@ public class HangHoaFragments extends Fragment implements DeleteButtonOnclick {
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
+            progressDialog.show();
         }
 
         @Override
         protected void onPostExecute(ArrayList<SanPham> sanPhams) {
             super.onPostExecute(sanPhams);
+            progressDialog.dismiss();
             if (sanPhams != null) {
                 sanPhamAdapter.clear();
                 sanPhamAdapter.addAll(sanPhams);
@@ -714,11 +789,13 @@ public class HangHoaFragments extends Fragment implements DeleteButtonOnclick {
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
+            progressDialog.show();
         }
 
         @Override
         protected void onPostExecute(ArrayList<SanPham> sanPhams) {
             super.onPostExecute(sanPhams);
+            progressDialog.dismiss();
             if (sanPhams != null) {
                 sanPhamAdapter.clear();
                 sanPhamAdapter.addAll(sanPhams);

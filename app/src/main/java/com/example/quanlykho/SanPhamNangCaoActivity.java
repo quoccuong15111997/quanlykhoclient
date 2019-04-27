@@ -10,24 +10,21 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.conts.Constant;
-import com.example.firebase.NhanVienFirebase;
 import com.example.firebase.SanPhamFirebase;
 import com.example.model.DanhMuc;
 import com.example.model.SanPham;
@@ -50,14 +47,11 @@ import org.json.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
-import java.io.FileInputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.util.ArrayList;
-
-import agency.tango.android.avatarview.loader.PicassoLoader;
 
 public class SanPhamNangCaoActivity extends AppCompatActivity {
     Intent intent;
@@ -71,8 +65,9 @@ public class SanPhamNangCaoActivity extends AppCompatActivity {
     String urlImage = "";
 
     //firebase
-    DatabaseReference mData;
+    DatabaseReference mData = FirebaseDatabase.getInstance().getReference();
     FirebaseStorage storage = FirebaseStorage.getInstance();
+
     int REQUEST_CODE_IMAGE = 1;
     int REQUEST_CODE_IMAGE_STORAGE = 2;
     StorageReference storageRef = storage.getReferenceFromUrl("gs://quanlykho-c05ef.appspot.com/");
@@ -331,6 +326,7 @@ public class SanPhamNangCaoActivity extends AppCompatActivity {
             super.onPostExecute(aBoolean);
             if(aBoolean==true){
                 Toast.makeText(SanPhamNangCaoActivity.this, "Lưu thành công", Toast.LENGTH_LONG).show();
+                xuLyUpload();
             }
             else {
                 Toast.makeText(SanPhamNangCaoActivity.this, "Lưu thất bại", Toast.LENGTH_LONG).show();
@@ -386,13 +382,11 @@ public class SanPhamNangCaoActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         if (requestCode == REQUEST_CODE_IMAGE && resultCode == RESULT_OK && data != null) {
             bitmapCamera = (Bitmap) data.getExtras().get("data");
-            xuLyUpload();
         }
         else if (requestCode == REQUEST_CODE_IMAGE_STORAGE && resultCode == RESULT_OK && data != null) {
             Uri uri=data.getData();
             String path=getRealPathFromURI(uri);
             bitmapCamera=getThumbnail(path);
-            xuLyUpload();
         }
         super.onActivityResult(requestCode, resultCode, data);
     }
@@ -439,7 +433,8 @@ public class SanPhamNangCaoActivity extends AppCompatActivity {
                     final Uri downloadUri = task.getResult();
                     urlImage=downloadUri.toString();
                     sanPhamFirebase.setUrlImage(urlImage);
-                    mData.child("SanPham").child(KEY).child("urlImage").setValue((downloadUri.toString()), new DatabaseReference.CompletionListener() {
+                    String key=KEY;
+                    mData.child("SanPham").child(key).child("urlImage").setValue((downloadUri.toString()), new DatabaseReference.CompletionListener() {
                         @Override
                         public void onComplete(@Nullable DatabaseError databaseError, @NonNull DatabaseReference databaseReference) {
                             if (databaseError == null) {
@@ -487,15 +482,13 @@ public class SanPhamNangCaoActivity extends AppCompatActivity {
         return BitmapFactory.decodeFile(pathHinh, opts);
     }
     private void initFirebase() {
-        mData = FirebaseDatabase.getInstance().getReference();
         mData.child("SanPham").addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
                 sanPhamFirebase = dataSnapshot.getValue(SanPhamFirebase.class);
                 if (sanPhamFirebase.getTenSanPham().equals(sanPham.getTenSanPham())) {
+                    KEY=dataSnapshot.getKey();
                     urlImage = sanPhamFirebase.getUrlImage();
-                    Picasso.with(SanPhamNangCaoActivity.this).load(urlImage).into(imgSanPham);
-                    KEY = dataSnapshot.getKey();
                     Picasso.with(SanPhamNangCaoActivity.this).load(urlImage).into(imgSanPham);
                 }
             }
