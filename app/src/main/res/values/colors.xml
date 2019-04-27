@@ -47,5 +47,6 @@
     <color name="priority3">#e61919</color>
     <color name="priority1">#36bf00</color>
     <color name="priority2">#bf7400</color>
+    <color name="titletoolbar">#B2FF59</color>
 
 </resources>

@@ -17,8 +17,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.Spinner;
@@ -40,76 +40,73 @@ import java.net.URL;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 
-public class HangHoaFragment extends Fragment implements DeleteButtonOnclick {
+public class HangHoaFragments extends Fragment implements DeleteButtonOnclick {
     static View view;
-    EditText edtTen, edtGia, edtSoLuong;
-    Spinner spiner_ChungLoai, spinner_ChucNang;
-    Button btnTim, btnThem, btnSua, btnLuu, btnNangCao;
-    ArrayAdapter chucNangAdapter,chungLoaiAdapter;
     static SanPhamAdapter sanPhamAdapter;
     ListView lvSanPham;
-    LinearLayout llNangCao, llGia;
     ArrayList<SanPham> dsSanPham;
-    static int positionChucNang = 0;
-    static int maSanPhamXoa=0;
-    static int viTriSanPham=0;
+    ImageView imgSeach, imgSort, imgSortClicked, imgAdd;
+    EditText edtTim;
     SanPham spSua;
+    static int positionChucNang = 0;
+    static int maSanPhamXoa = 0;
+    static int viTriSanPham = 0;
+    LinearLayout llGia;
+    int chucNangChon = 0;
     Spinner spinner_GiaMin, spinner_GiaMax;
     ArrayAdapter<Integer> giaAdapter;
-    ArrayList<Integer>dsdonGia;
-    ArrayList<SanPham> dsTatCaSanPham= new ArrayList<>();
+    ArrayList<Integer> dsdonGia;
+    Spinner spiner_ChungLoai, spinner_ChucNang;
+    ArrayAdapter chungLoaiAdapter, chucNangAdapter;
+    ArrayList<SanPham> dsTatCaSanPham = new ArrayList<>();
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        view = (View) inflater.inflate(R.layout.fragment_hanghoa, container, false);
+        view = (View) inflater.inflate(R.layout.fragment_hang_hoa, container, false);
         addControls();
         addEvents();
         return view;
     }
 
     private void addEvents() {
-        spinner_ChucNang.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        imgAdd.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                positionChucNang = position;
-                if (position == 0) {
-                    llGia.setVisibility(View.GONE);
-                } else if (position == 1) {
-                    llGia.setVisibility(View.GONE);
-                } else if (position == 2) {
-                    llGia.setVisibility(View.VISIBLE);
-                }
-            }
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
+            public void onClick(View v) {
+                Intent intent = new Intent(view.getContext(), ThemSanPhamActivity.class);
+                startActivity(intent);
             }
         });
-        spiner_ChungLoai.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        imgSeach.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+            public void onClick(View v) {
+                xuLyTim();
             }
-
+        });
+        imgSort.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
+            public void onClick(View v) {
+                spinner_ChucNang.setVisibility(View.VISIBLE);
+                imgSort.setVisibility(View.GONE);
+                imgSortClicked.setVisibility(View.VISIBLE);
+            }
+        });
+        imgSortClicked.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                spinner_ChucNang.setVisibility(View.GONE);
+                imgSort.setVisibility(View.VISIBLE);
+                imgSortClicked.setVisibility(View.GONE);
             }
         });
         lvSanPham.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                spSua= dsSanPham.get(position);
+                spSua = dsSanPham.get(position);
                 DanhMuc danhMuc= (DanhMuc) spiner_ChungLoai.getSelectedItem();
                 spSua.setMaDanhMuc(danhMuc.getMaDanhMuc());
-                edtTen.setText(spSua.getTenSanPham());
-                edtGia.setText(spSua.getDonGia()+"");
-                edtGia.setEnabled(false);
-                edtSoLuong.setText(spSua.getSoLuong()+"");
-                edtSoLuong.setEnabled(false);
-
-                Intent intent= new Intent(getContext(),SanPhamNangCaoActivity.class);
-                intent.putExtra("SANPHAM",spSua);
-                startActivityForResult(intent,1);
+                Intent intent = new Intent(getContext(), SanPhamNangCaoActivity.class);
+                intent.putExtra("SANPHAM", spSua);
+                startActivityForResult(intent, 1);
 
             }
         });
@@ -117,61 +114,48 @@ public class HangHoaFragment extends Fragment implements DeleteButtonOnclick {
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
                 registerForContextMenu(lvSanPham);
-                viTriSanPham=position;
-                SanPham sanPham=sanPhamAdapter.getItem(position);
-                maSanPhamXoa=sanPham.getMaSanPham();
+                viTriSanPham = position;
+                SanPham sanPham = sanPhamAdapter.getItem(position);
+                maSanPhamXoa = sanPham.getMaSanPham();
                 return false;
             }
         });
-        btnTim.setOnClickListener(new View.OnClickListener() {
+        spinner_ChucNang.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
-            public void onClick(View v) {
-                xuLyTim();
-            }
-        });
-        btnSua.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                edtGia.setEnabled(true);
-                edtSoLuong.setEnabled(true);
-            }
-        });
-        btnLuu.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (spSua != null) {
-                    xuLySuaSanPham();
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                positionChucNang = position;
+                if (position == 0) {
+                    llGia.setVisibility(View.GONE);
+                    spiner_ChungLoai.setVisibility(View.VISIBLE);
+                } else if (position == 1) {
+                    llGia.setVisibility(View.GONE);
+                    spiner_ChungLoai.setVisibility(View.GONE);
+                } else if (position == 2) {
+                    llGia.setVisibility(View.VISIBLE);
+                    spiner_ChungLoai.setVisibility(View.GONE);
                 }
             }
-        });
-        btnThem.setOnClickListener(new View.OnClickListener() {
+
             @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(view.getContext(),ThemSanPhamActivity.class);
-                startActivity(intent);
-            }
-        });
-        btnNangCao.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String titleButton= String.valueOf(btnNangCao.getText()).toUpperCase();
-                if(titleButton.equals("NÂNG CAO")){
-                    llNangCao.setVisibility(View.VISIBLE);
-                    btnNangCao.setText("THU NHỎ");
-                    btnNangCao.setBackgroundResource(R.drawable.boder_buuton_dong);
-                }
-                else if(titleButton.equals("THU NHỎ")){
-                    llNangCao.setVisibility(View.GONE);
-                    btnNangCao.setText("NÂNG CAO");
-                    btnNangCao.setBackgroundResource(R.drawable.boder_buuton_luu);
-                }
+            public void onNothingSelected(AdapterView<?> parent) {
+                positionChucNang = 0;
             }
         });
     }
 
     private void xuLyXacNhanXoaSanPham() {
-        ConfirmDialog confirmDialog= new ConfirmDialog();
-        confirmDialog.show(getFragmentManager(),"sss");
+        AlertDialog.Builder builder= new AlertDialog.Builder(view.getContext());
+        builder.setTitle("Bạn chắn chắn muốn xóa?").setNegativeButton("Xóa", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                xuLyXoaSanPham();
+            }
+        }).setPositiveButton("Hủy", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+            }
+        }).show();
     }
 
     public void xuLyTim() {
@@ -183,17 +167,6 @@ public class HangHoaFragment extends Fragment implements DeleteButtonOnclick {
             xuLyTimTheoGia();
     }
 
-
-    private void xuLySuaSanPham() {
-        SanPham sanPham= new SanPham();
-        sanPham.setMaSanPham(spSua.getMaSanPham());
-        sanPham.setTenSanPham(edtTen.getText().toString());
-        sanPham.setSoLuong(Integer.parseInt(edtSoLuong.getText().toString()));
-        sanPham.setDonGia(Integer.parseInt(edtGia.getText().toString()));
-        SuaSanPhamTask task= new SuaSanPhamTask();
-        task.execute(sanPham);
-    }
-
     private void xuLyTimTheoLoai() {
         DanhMuc dm = (DanhMuc) spiner_ChungLoai.getSelectedItem();
         TraCuuSanPhamTheoMaDmTask task = new TraCuuSanPhamTheoMaDmTask();
@@ -201,31 +174,56 @@ public class HangHoaFragment extends Fragment implements DeleteButtonOnclick {
     }
 
     private void xuLyTimTheoGia() {
-        int giaMin= (int) spinner_GiaMin.getSelectedItem();
-        int giaMax= (int) spinner_GiaMax.getSelectedItem();
-        TraCuuSanPhamTheoDonGiaTask task= new TraCuuSanPhamTheoDonGiaTask();
-        String params="a="+giaMin+"&b="+giaMax;
+        int giaMin = (int) spinner_GiaMin.getSelectedItem();
+        int giaMax = (int) spinner_GiaMax.getSelectedItem();
+        TraCuuSanPhamTheoDonGiaTask task = new TraCuuSanPhamTheoDonGiaTask();
+        String params = "a=" + giaMin + "&b=" + giaMax;
         task.execute(params);
     }
 
     private void xuLyTimTheoTen() {
-        String ten= String.valueOf(edtTen.getText());
-        SanPham sanPham= new SanPham();
+        String ten = String.valueOf(edtTim.getText());
+        SanPham sanPham = new SanPham();
         sanPham.setTenSanPham(ten);
-        TraCuuSanPhamTheoTenTask theoTenTask= new TraCuuSanPhamTheoTenTask();
+        TraCuuSanPhamTheoTenTask theoTenTask = new TraCuuSanPhamTheoTenTask();
         theoTenTask.execute(sanPham);
     }
-    private void addControls() {
-        edtGia = view.findViewById(R.id.edtGiaSanPham);
-        edtSoLuong = view.findViewById(R.id.edtSoLuong);
-        edtTen = view.findViewById(R.id.edtTenSanPham);
 
-        btnLuu = view.findViewById(R.id.btnLuu);
-        btnSua = view.findViewById(R.id.btnSua);
-        btnThem = view.findViewById(R.id.btnThem);
-        btnTim = view.findViewById(R.id.btnTim);
+    private void addControls() {
+        dsSanPham = new ArrayList<>();
+        lvSanPham = view.findViewById(R.id.lvSanPham);
+        sanPhamAdapter = new SanPhamAdapter(this.view.getContext(), R.layout.row_sanpham, dsSanPham);
+        sanPhamAdapter.isClicked(this);
+        lvSanPham.setAdapter(sanPhamAdapter);
+
+        imgAdd = view.findViewById(R.id.imgAddProduct);
+        imgSeach = view.findViewById(R.id.imgSeach);
+        imgSort = view.findViewById(R.id.imgSort);
+        imgSortClicked = view.findViewById(R.id.imgSortClicked);
+        imgSortClicked.setVisibility(View.GONE);
+        edtTim = view.findViewById(R.id.edtTim);
+
+        llGia = view.findViewById(R.id.llGia);
+        llGia.setVisibility(View.GONE);
+
+        spinner_GiaMax = view.findViewById(R.id.spinner_GiaMax);
+        spinner_GiaMin = view.findViewById(R.id.spinner_GiaMin);
+        giaAdapter = new ArrayAdapter<>(view.getContext(), android.R.layout.simple_spinner_item);
+        giaAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        dsdonGia = new ArrayList<>();
+        addDataGia();
+        giaAdapter.addAll(dsdonGia);
+        spinner_GiaMin.setAdapter(giaAdapter);
+        spinner_GiaMax.setAdapter(giaAdapter);
+
+        spiner_ChungLoai = view.findViewById(R.id.spinner_ChungLoai);
+        chungLoaiAdapter = new ArrayAdapter(view.getContext(), android.R.layout.simple_spinner_item);
+        chungLoaiAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spiner_ChungLoai.setAdapter(chungLoaiAdapter);
+        spiner_ChungLoai.setVisibility(View.GONE);
 
         spinner_ChucNang = view.findViewById(R.id.spinner_TraCuu);
+        spinner_ChucNang.setVisibility(View.GONE);
         chucNangAdapter = new ArrayAdapter(view.getContext(), android.R.layout.simple_spinner_item);
         chucNangAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         ArrayList<String> dsChucNang = new ArrayList<>();
@@ -235,36 +233,8 @@ public class HangHoaFragment extends Fragment implements DeleteButtonOnclick {
         chucNangAdapter.addAll(dsChucNang);
         spinner_ChucNang.setAdapter(chucNangAdapter);
 
-        spiner_ChungLoai = view.findViewById(R.id.spinner_ChungLoai);
-        chungLoaiAdapter = new ArrayAdapter(view.getContext(),android.R.layout.simple_spinner_item);
-        chungLoaiAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spiner_ChungLoai.setAdapter(chungLoaiAdapter);
-
         LayDanhSachDanhMucTask task = new LayDanhSachDanhMucTask();
         task.execute();
-
-        dsSanPham = new ArrayList<>();
-        lvSanPham = view.findViewById(R.id.lvSanPham);
-        sanPhamAdapter = new SanPhamAdapter(this.view.getContext(), R.layout.row_sanpham, dsSanPham);
-        sanPhamAdapter.isClicked(this);
-        lvSanPham.setAdapter(sanPhamAdapter);
-
-        llNangCao=view.findViewById(R.id.ll_nang_cao);
-        llNangCao.setVisibility(View.GONE);
-
-        btnNangCao=view.findViewById(R.id.btnNangCao);
-
-        llGia=view.findViewById(R.id.llGia);
-        llGia.setVisibility(View.GONE);
-        spinner_GiaMax=view.findViewById(R.id.spinner_GiaMax);
-        spinner_GiaMin=view.findViewById(R.id.spinner_GiaMin);
-        giaAdapter=new ArrayAdapter<>(view.getContext(),android.R.layout.simple_spinner_item);
-        giaAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        dsdonGia= new ArrayList<>();
-        addDataGia();
-        giaAdapter.addAll(dsdonGia);
-        spinner_GiaMin.setAdapter(giaAdapter);
-        spinner_GiaMax.setAdapter(giaAdapter);
     }
 
     private void addDataGia() {
@@ -289,12 +259,12 @@ public class HangHoaFragment extends Fragment implements DeleteButtonOnclick {
     @Override
     public void onCreateContextMenu(ContextMenu menu, View v,
                                     ContextMenu.ContextMenuInfo menuInfo) {
-                getActivity().getMenuInflater().inflate(R.menu.context_menu, menu);
+        getActivity().getMenuInflater().inflate(R.menu.context_menu, menu);
     }
+
     @Override
     public boolean onContextItemSelected(MenuItem item) {
-        switch(item.getItemId())
-        {
+        switch (item.getItemId()) {
             case R.id.itemXoa:
                 xuLyXacNhanXoaSanPham();
                 break;
@@ -306,30 +276,31 @@ public class HangHoaFragment extends Fragment implements DeleteButtonOnclick {
     }
 
     private void xuLySuaSanPhamChitiet() {
-        SanPham sanPhamChon=sanPhamAdapter.getItem(viTriSanPham);
-        DanhMuc danhMuc= (DanhMuc) spiner_ChungLoai.getSelectedItem();
+        SanPham sanPhamChon = sanPhamAdapter.getItem(viTriSanPham);
+        DanhMuc danhMuc = (DanhMuc) spiner_ChungLoai.getSelectedItem();
         sanPhamChon.setMaDanhMuc(danhMuc.getMaDanhMuc());
-        Intent intent= new Intent(getContext(),SanPhamNangCaoActivity.class);
-        intent.putExtra("SANPHAM",sanPhamChon);
-        startActivityForResult(intent,1);
+        Intent intent = new Intent(getContext(), SanPhamNangCaoActivity.class);
+        intent.putExtra("SANPHAM", sanPhamChon);
+        startActivityForResult(intent, 1);
     }
 
     public static void xuLyXoaSanPham() {
-        XoaSanPhamTask task= new XoaSanPhamTask();
+        XoaSanPhamTask task = new XoaSanPhamTask();
         task.execute(maSanPhamXoa);
 
     }
+
     public static void xuLyCapNhatDSSanPHamSauKhiXoa() {
-        SanPham sanPham=sanPhamAdapter.getItem(viTriSanPham);
+        SanPham sanPham = sanPhamAdapter.getItem(viTriSanPham);
         sanPhamAdapter.remove(sanPham);
         sanPhamAdapter.notifyDataSetChanged();
     }
 
     @Override
     public void deleteOnclick(int position) {
-        viTriSanPham=position;
-        SanPham sanPham=sanPhamAdapter.getItem(position);
-        maSanPhamXoa=sanPham.getMaSanPham();
+        viTriSanPham = position;
+        SanPham sanPham = sanPhamAdapter.getItem(position);
+        maSanPhamXoa = sanPham.getMaSanPham();
         xuLyXacNhanXoaSanPham();
     }
 
@@ -345,7 +316,7 @@ public class HangHoaFragment extends Fragment implements DeleteButtonOnclick {
             if (danhMucs != null) {
                 chungLoaiAdapter.clear();
                 chungLoaiAdapter.addAll(danhMucs);
-                chucNangAdapter.notifyDataSetChanged();
+                chungLoaiAdapter.notifyDataSetChanged();
             }
         }
 
@@ -358,7 +329,7 @@ public class HangHoaFragment extends Fragment implements DeleteButtonOnclick {
         protected ArrayList<DanhMuc> doInBackground(Void... voids) {
             ArrayList<DanhMuc> dsDanhMuc = new ArrayList<>();
             try {
-                URL url = new URL(Constant.IP_ADDRESS+"DanhMuc");
+                URL url = new URL(Constant.IP_ADDRESS + "DanhMuc");
                 HttpURLConnection connection = (HttpURLConnection) url.openConnection();
                 connection.setRequestMethod("GET");
                 connection.setRequestProperty("Content-Type", "application/json;charset=UTF-8");
@@ -418,7 +389,7 @@ public class HangHoaFragment extends Fragment implements DeleteButtonOnclick {
         protected ArrayList<SanPham> doInBackground(Integer... integers) {
             ArrayList<SanPham> dsSp = new ArrayList<>();
             try {
-                URL url = new URL(Constant.IP_ADDRESS+"SanPham/?madm=" + integers[0]);
+                URL url = new URL(Constant.IP_ADDRESS + "SanPham/?madm=" + integers[0]);
                 HttpURLConnection connection = (HttpURLConnection) url.openConnection();
                 connection.setRequestMethod("GET");
                 connection.setRequestProperty("Content-Type", "application/json;charset=UTF-8");
@@ -493,7 +464,7 @@ public class HangHoaFragment extends Fragment implements DeleteButtonOnclick {
         @Override
         protected SanPham doInBackground(Integer... integers) {
             try {
-                URL url = new URL(Constant.IP_ADDRESS+"SanPham/" + integers[0]);
+                URL url = new URL(Constant.IP_ADDRESS + "SanPham/" + integers[0]);
                 HttpURLConnection connection = (HttpURLConnection) url.openConnection();
                 connection.setRequestMethod("GET");
                 connection.setRequestProperty("Content-Type", "application/json;charset=UTF-8");
@@ -532,7 +503,7 @@ public class HangHoaFragment extends Fragment implements DeleteButtonOnclick {
         }
     }
 
-    class TraCuuSanPhamTheoTenTask extends AsyncTask<SanPham,Void,ArrayList<SanPham>>{
+    class TraCuuSanPhamTheoTenTask extends AsyncTask<SanPham, Void, ArrayList<SanPham>> {
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
@@ -544,11 +515,11 @@ public class HangHoaFragment extends Fragment implements DeleteButtonOnclick {
             if (sanPhams != null) {
                 sanPhamAdapter.clear();
                 sanPhamAdapter.addAll(sanPhams);
-            } else{
-                AlertDialog.Builder alertDialog= new AlertDialog.Builder(view.getContext());
+            } else {
+                AlertDialog.Builder alertDialog = new AlertDialog.Builder(view.getContext());
                 alertDialog.setTitle("không tìm thấy sản phẩm");
                 alertDialog.setIcon(R.drawable.ic_error);
-                alertDialog.setNegativeButton("OK",new DialogInterface.OnClickListener() {
+                alertDialog.setNegativeButton("OK", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                     }
@@ -565,14 +536,14 @@ public class HangHoaFragment extends Fragment implements DeleteButtonOnclick {
         protected ArrayList<SanPham> doInBackground(SanPham... sanPhams) {
             ArrayList<SanPham> dsSp = new ArrayList<>();
             try {
-                String params=sanPhams[0].getTenSanPham().toString();
-                String []paramsm=params.split(" ");
-                StringBuilder builder1=new StringBuilder();
-                for (int i=0;i<paramsm.length-1;i++){
+                String params = sanPhams[0].getTenSanPham().toString();
+                String[] paramsm = params.split(" ");
+                StringBuilder builder1 = new StringBuilder();
+                for (int i = 0; i < paramsm.length - 1; i++) {
                     builder1.append(paramsm[i]).append("%20");
                 }
-                String kq=builder1.append(paramsm[paramsm.length-1]).toString();
-                URL url = new URL(Constant.IP_ADDRESS+"SanPham/?tenSanPhamTim=" +kq);
+                String kq = builder1.append(paramsm[paramsm.length - 1]).toString();
+                URL url = new URL(Constant.IP_ADDRESS + "SanPham/?tenSanPhamTim=" + kq);
                 HttpURLConnection connection = (HttpURLConnection) url.openConnection();
                 connection.setRequestMethod("GET");
                 connection.setRequestProperty("Content-Type", "application/json;charset=UTF-8");
@@ -613,7 +584,7 @@ public class HangHoaFragment extends Fragment implements DeleteButtonOnclick {
         }
     }
 
-    class SuaSanPhamTask extends AsyncTask<SanPham,Void,Boolean>{
+    class SuaSanPhamTask extends AsyncTask<SanPham, Void, Boolean> {
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
@@ -622,11 +593,10 @@ public class HangHoaFragment extends Fragment implements DeleteButtonOnclick {
         @Override
         protected void onPostExecute(Boolean aBoolean) {
             super.onPostExecute(aBoolean);
-            if(aBoolean==true){
+            if (aBoolean == true) {
                 Toast.makeText(view.getContext(), "Lưu thành công", Toast.LENGTH_LONG).show();
                 xuLyTim();
-            }
-            else {
+            } else {
                 Toast.makeText(view.getContext(), "Lưu thất bại", Toast.LENGTH_LONG).show();
             }
         }
@@ -638,44 +608,44 @@ public class HangHoaFragment extends Fragment implements DeleteButtonOnclick {
 
         @Override
         protected Boolean doInBackground(SanPham... sanPhams) {
-            try{
-                int masp=sanPhams[0].getMaSanPham();
-                String tensp=sanPhams[0].getTenSanPham();
-                int gia=sanPhams[0].getDonGia();
-                int soluong=sanPhams[0].getSoLuong();
-                boolean tinhtrang=sanPhams[0].isTinhTrang();
-                int size=sanPhams[0].getSize();
-                int madm=sanPhams[0].getMaDanhMuc();
+            try {
+                int masp = sanPhams[0].getMaSanPham();
+                String tensp = sanPhams[0].getTenSanPham();
+                int gia = sanPhams[0].getDonGia();
+                int soluong = sanPhams[0].getSoLuong();
+                boolean tinhtrang = sanPhams[0].isTinhTrang();
+                int size = sanPhams[0].getSize();
+                int madm = sanPhams[0].getMaDanhMuc();
 
-                String params="maSpSua="+masp +
-                        "&tenSp="+ URLEncoder.encode(tensp) +
-                        "&giaSp="+gia+
-                        "&soLuong="+soluong +
-                        "&tinhTrang="+tinhtrang +
-                        "&size="+size;
-                URL url= new URL(Constant.IP_ADDRESS+"SanPham/?"+params);
-                HttpURLConnection connection= (HttpURLConnection) url.openConnection();
+                String params = "maSpSua=" + masp +
+                        "&tenSp=" + URLEncoder.encode(tensp) +
+                        "&giaSp=" + gia +
+                        "&soLuong=" + soluong +
+                        "&tinhTrang=" + tinhtrang +
+                        "&size=" + size;
+                URL url = new URL(Constant.IP_ADDRESS + "SanPham/?" + params);
+                HttpURLConnection connection = (HttpURLConnection) url.openConnection();
                 connection.setRequestMethod("POST");
-                connection.setRequestProperty("Content-Type","application/json;charset=UTF-8");
+                connection.setRequestProperty("Content-Type", "application/json;charset=UTF-8");
 
-                InputStreamReader isr= new InputStreamReader(connection.getInputStream(),"UTF-8");
-                BufferedReader br= new BufferedReader(isr);
-                StringBuilder builder= new StringBuilder();
-                String line=null;
-                while ((line=br.readLine())!=null){
+                InputStreamReader isr = new InputStreamReader(connection.getInputStream(), "UTF-8");
+                BufferedReader br = new BufferedReader(isr);
+                StringBuilder builder = new StringBuilder();
+                String line = null;
+                while ((line = br.readLine()) != null) {
                     builder.append(line);
                 }
-                boolean kq=builder.toString().contains("true");
+                boolean kq = builder.toString().contains("true");
                 return kq;
 
-            }
-            catch (Exception ex){
-                Log.e("LOI",ex.toString());
+            } catch (Exception ex) {
+                Log.e("LOI", ex.toString());
             }
             return false;
         }
     }
-    class LayDanhSachSanPhamTask extends AsyncTask<Void, Void, ArrayList<SanPham>>{
+
+    class LayDanhSachSanPhamTask extends AsyncTask<Void, Void, ArrayList<SanPham>> {
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
@@ -694,12 +664,12 @@ public class HangHoaFragment extends Fragment implements DeleteButtonOnclick {
 
         @Override
         protected ArrayList<SanPham> doInBackground(Void... voids) {
-            ArrayList<SanPham> dsSp= new ArrayList<>();
-            try{
-                URL url= new URL(Constant.IP_ADDRESS+"SanPham");
-                HttpURLConnection connection= (HttpURLConnection) url.openConnection();
+            ArrayList<SanPham> dsSp = new ArrayList<>();
+            try {
+                URL url = new URL(Constant.IP_ADDRESS + "SanPham");
+                HttpURLConnection connection = (HttpURLConnection) url.openConnection();
                 connection.setRequestMethod("GET");
-                connection.setRequestProperty("Content-Type","application/json;charset=UTF-8");
+                connection.setRequestProperty("Content-Type", "application/json;charset=UTF-8");
 
                 InputStreamReader isr = new InputStreamReader(connection.getInputStream(), "UTF-8");
                 BufferedReader br = new BufferedReader(isr);
@@ -708,21 +678,20 @@ public class HangHoaFragment extends Fragment implements DeleteButtonOnclick {
                 while ((line = br.readLine()) != null) {
                     builder.append(line);
                 }
-                JSONArray jsonArray=new JSONArray(builder.toString());
-                for(int i=0;i<jsonArray.length();i++){
-                    JSONObject object= jsonArray.getJSONObject(i);
-                    if(object==null){
-                        Toast.makeText(view.getContext(),"không tìm thấy sản phẩm",Toast.LENGTH_LONG).show();
-                    }
-                    else if(object!=null){
-                        int ma=object.getInt("Ma");
-                        String ten=object.getString("Ten");
-                        int donGia=object.getInt("DonGia");
-                        int soLuong=object.getInt("SoLuong");
-                        boolean tinhTrang=object.getBoolean("TinhTrang");
-                        int size=object.getInt("Size");
+                JSONArray jsonArray = new JSONArray(builder.toString());
+                for (int i = 0; i < jsonArray.length(); i++) {
+                    JSONObject object = jsonArray.getJSONObject(i);
+                    if (object == null) {
+                        Toast.makeText(view.getContext(), "không tìm thấy sản phẩm", Toast.LENGTH_LONG).show();
+                    } else if (object != null) {
+                        int ma = object.getInt("Ma");
+                        String ten = object.getString("Ten");
+                        int donGia = object.getInt("DonGia");
+                        int soLuong = object.getInt("SoLuong");
+                        boolean tinhTrang = object.getBoolean("TinhTrang");
+                        int size = object.getInt("Size");
 
-                        SanPham sp= new SanPham();
+                        SanPham sp = new SanPham();
                         sp.setMaSanPham(ma);
                         sp.setTenSanPham(ten);
                         sp.setDonGia(donGia);
@@ -734,14 +703,14 @@ public class HangHoaFragment extends Fragment implements DeleteButtonOnclick {
                     }
                 }
                 return dsSp;
-            }
-            catch (Exception ex){
-                Log.e("LOI",ex.toString());
+            } catch (Exception ex) {
+                Log.e("LOI", ex.toString());
             }
             return null;
         }
     }
-    class TraCuuSanPhamTheoDonGiaTask extends AsyncTask<String, Void, ArrayList<SanPham>>{
+
+    class TraCuuSanPhamTheoDonGiaTask extends AsyncTask<String, Void, ArrayList<SanPham>> {
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
@@ -750,7 +719,7 @@ public class HangHoaFragment extends Fragment implements DeleteButtonOnclick {
         @Override
         protected void onPostExecute(ArrayList<SanPham> sanPhams) {
             super.onPostExecute(sanPhams);
-            if(sanPhams!=null){
+            if (sanPhams != null) {
                 sanPhamAdapter.clear();
                 sanPhamAdapter.addAll(sanPhams);
             }
@@ -763,12 +732,12 @@ public class HangHoaFragment extends Fragment implements DeleteButtonOnclick {
 
         @Override
         protected ArrayList<SanPham> doInBackground(String... strings) {
-            ArrayList<SanPham> dsSp= new ArrayList<>();
-            try{
-                URL url= new URL(Constant.IP_ADDRESS+"SanPham/?"+strings[0]);
-                HttpURLConnection connection= (HttpURLConnection) url.openConnection();
+            ArrayList<SanPham> dsSp = new ArrayList<>();
+            try {
+                URL url = new URL(Constant.IP_ADDRESS + "SanPham/?" + strings[0]);
+                HttpURLConnection connection = (HttpURLConnection) url.openConnection();
                 connection.setRequestMethod("GET");
-                connection.setRequestProperty("Content-Type","application/json;charset=UTF-8");
+                connection.setRequestProperty("Content-Type", "application/json;charset=UTF-8");
 
                 InputStreamReader isr = new InputStreamReader(connection.getInputStream(), "UTF-8");
                 BufferedReader br = new BufferedReader(isr);
@@ -777,21 +746,20 @@ public class HangHoaFragment extends Fragment implements DeleteButtonOnclick {
                 while ((line = br.readLine()) != null) {
                     builder.append(line);
                 }
-                JSONArray jsonArray=new JSONArray(builder.toString());
-                for(int i=0;i<jsonArray.length();i++){
-                    JSONObject object= jsonArray.getJSONObject(i);
-                    if(object==null){
-                        Toast.makeText(view.getContext(),"không tìm thấy sản phẩm",Toast.LENGTH_LONG).show();
-                    }
-                    else if(object!=null){
-                        int ma=object.getInt("Ma");
-                        String ten=object.getString("Ten");
-                        int donGia=object.getInt("DonGia");
-                        int soLuong=object.getInt("SoLuong");
-                        boolean tinhTrang=object.getBoolean("TinhTrang");
-                        int size=object.getInt("Size");
+                JSONArray jsonArray = new JSONArray(builder.toString());
+                for (int i = 0; i < jsonArray.length(); i++) {
+                    JSONObject object = jsonArray.getJSONObject(i);
+                    if (object == null) {
+                        Toast.makeText(view.getContext(), "không tìm thấy sản phẩm", Toast.LENGTH_LONG).show();
+                    } else if (object != null) {
+                        int ma = object.getInt("Ma");
+                        String ten = object.getString("Ten");
+                        int donGia = object.getInt("DonGia");
+                        int soLuong = object.getInt("SoLuong");
+                        boolean tinhTrang = object.getBoolean("TinhTrang");
+                        int size = object.getInt("Size");
 
-                        SanPham sp= new SanPham();
+                        SanPham sp = new SanPham();
                         sp.setMaSanPham(ma);
                         sp.setTenSanPham(ten);
                         sp.setDonGia(donGia);
@@ -803,22 +771,23 @@ public class HangHoaFragment extends Fragment implements DeleteButtonOnclick {
                     }
                 }
                 return dsSp;
-            }
-            catch (Exception ex){
-                Log.e("LOI",ex.toString());
+            } catch (Exception ex) {
+                Log.e("LOI", ex.toString());
             }
             return null;
         }
     }
+
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == 1) {
-            if(resultCode == Activity.RESULT_OK){
+            if (resultCode == Activity.RESULT_OK) {
                 xuLyTim();
             }
         }
     }
-    static class XoaSanPhamTask extends AsyncTask<Integer,Void,Boolean>{
+
+    static class XoaSanPhamTask extends AsyncTask<Integer, Void, Boolean> {
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
@@ -827,19 +796,25 @@ public class HangHoaFragment extends Fragment implements DeleteButtonOnclick {
         @Override
         protected void onPostExecute(Boolean aBoolean) {
             super.onPostExecute(aBoolean);
-            if(aBoolean==true){
+            if (aBoolean == true) {
                 xuLyCapNhatDSSanPHamSauKhiXoa();
-                AlertDialog.Builder alertDialog= new AlertDialog.Builder(view.getContext());
+                AlertDialog.Builder alertDialog = new AlertDialog.Builder(view.getContext());
                 alertDialog.setTitle("Xóa thành công");
                 alertDialog.setIcon(R.drawable.ic_ok);
-                alertDialog.setNegativeButton("OK",new DialogInterface.OnClickListener() {
+                alertDialog.setNegativeButton("OK", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                     }
                 }).show();
-            }
-            else {
-                Toast.makeText(view.getContext(),"Xóa thất bại",Toast.LENGTH_LONG).show();
+            } else {
+                AlertDialog.Builder alertDialog = new AlertDialog.Builder(view.getContext());
+                alertDialog.setTitle("Xóa thất bại");
+                alertDialog.setIcon(R.drawable.ic_error);
+                alertDialog.setNegativeButton("OK", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                    }
+                }).show();
             }
         }
 
@@ -850,24 +825,23 @@ public class HangHoaFragment extends Fragment implements DeleteButtonOnclick {
 
         @Override
         protected Boolean doInBackground(Integer... integers) {
-            try{
-                URL url= new URL(Constant.IP_ADDRESS+"SanPham/?maSp="+integers[0]);
-                HttpURLConnection connection= (HttpURLConnection) url.openConnection();
+            try {
+                URL url = new URL(Constant.IP_ADDRESS + "SanPham/?maSp=" + integers[0]);
+                HttpURLConnection connection = (HttpURLConnection) url.openConnection();
                 connection.setRequestMethod("POST");
-                connection.setRequestProperty("Content-Type","application/json;charset=UTF-8");
+                connection.setRequestProperty("Content-Type", "application/json;charset=UTF-8");
 
-                InputStreamReader isr= new InputStreamReader(connection.getInputStream(),"UTF-8");
-                BufferedReader br= new BufferedReader(isr);
-                StringBuilder builder= new StringBuilder();
-                String line=null;
-                while ((line=br.readLine())!=null){
+                InputStreamReader isr = new InputStreamReader(connection.getInputStream(), "UTF-8");
+                BufferedReader br = new BufferedReader(isr);
+                StringBuilder builder = new StringBuilder();
+                String line = null;
+                while ((line = br.readLine()) != null) {
                     builder.append(line);
                 }
-                boolean kq=builder.toString().contains("true");
+                boolean kq = builder.toString().contains("true");
                 return kq;
-            }
-            catch (Exception ex){
-                Log.e("LOI",ex.toString());
+            } catch (Exception ex) {
+                Log.e("LOI", ex.toString());
             }
             return false;
         }

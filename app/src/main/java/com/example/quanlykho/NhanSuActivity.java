@@ -7,10 +7,10 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.AsyncTask;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.util.Log;
 import android.view.ContextMenu;
 import android.view.MenuItem;
@@ -45,8 +45,6 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.util.ArrayList;
-
-import agency.tango.android.avatarview.loader.PicassoLoader;
 
 public class NhanSuActivity extends AppCompatActivity {
     ListView lv_NhanVien;
@@ -153,6 +151,7 @@ public class NhanSuActivity extends AppCompatActivity {
                 linearLayout_tim.setVisibility(View.GONE);
                 txtChucVu.setBackgroundResource(R.drawable.border_edittext);
                 txtTen.setBackgroundResource(R.drawable.border_edittext);
+                txtChucVu.setTextColor(Color.BLACK);
                 layDanhSachNhanVien();
             }
         });
