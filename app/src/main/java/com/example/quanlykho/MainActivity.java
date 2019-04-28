@@ -55,15 +55,8 @@ public class MainActivity extends AppCompatActivity
         getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,new HangHoaFragments()).commit();
         toolbar.setTitle("Quản lý hàng hóa");
         addControls();
-        addEvents();
-        fakeData();
-    }
-    private void addEvents() {
     }
 
-    private void fakeData() {
-
-    }
 
     private void addControls() {
         Intent intentNhanVien=getIntent();
@@ -134,6 +127,11 @@ public class MainActivity extends AppCompatActivity
         }
         else if(id==R.id.nav_DoiMatKhau){
             Intent intent= new Intent(MainActivity.this,DoiMatKhauActivity.class);
+            intent.putExtra("NHANVIEN",nhanVien);
+            startActivity(intent);
+        }
+        else if(id==R.id.nav_Chat){
+            Intent intent=new Intent(MainActivity.this,ChatActivity.class);
             intent.putExtra("NHANVIEN",nhanVien);
             startActivity(intent);
         }

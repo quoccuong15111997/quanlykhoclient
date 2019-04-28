@@ -23,6 +23,10 @@
         android:id="@+id/nav_TaiKhoan"/>
     <group android:checkableBehavior="single">
         <item
+            android:id="@+id/nav_Chat"
+            android:icon="@drawable/chat_24px"
+            android:title="Phòng chat"/>
+        <item
             android:id="@+id/nav_DoiMatKhau"
             android:icon="@drawable/ic_changepass"
             android:title="Đổi mật khẩu"/>
