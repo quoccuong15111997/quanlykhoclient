@@ -65,22 +65,24 @@
                     android:textColorHint="#000000"
                     android:textSize="16dp" />
             </LinearLayout>
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:background="#4a5a71">
-
-            </LinearLayout>
+            <CheckBox
+                android:id="@+id/chkRemember"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Nhớ mật khẩu"
+                android:layout_gravity="center"/>
         </LinearLayout>
     </LinearLayout>
+
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:paddingLeft="60dp"
-        android:paddingRight="60dp"
-        android:orientation="vertical"
+        android:layout_marginBottom="20dp"
         android:gravity="bottom"
-        android:layout_marginBottom="20dp">
+        android:orientation="vertical"
+        android:paddingLeft="60dp"
+        android:paddingRight="60dp">
 
         <Button
             android:id="@+id/btnLogin"

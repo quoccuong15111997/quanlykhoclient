@@ -141,6 +141,10 @@ public class MainActivity extends AppCompatActivity
             Intent intent=new Intent(MainActivity.this,LoginActivity.class);
             startActivity(intent);
         }
+        else if(id==R.id.nav_About){
+            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,new AboutActivity()).commit();
+            toolbar.setTitle("Giới thiệu");
+        }
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;

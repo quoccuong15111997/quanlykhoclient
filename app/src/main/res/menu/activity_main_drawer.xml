@@ -27,6 +27,10 @@
             android:icon="@drawable/ic_changepass"
             android:title="Đổi mật khẩu"/>
         <item
+            android:id="@+id/nav_About"
+            android:icon="@drawable/info_24px"
+            android:title="Thông tin ứng dụng"/>
+        <item
             android:id="@+id/nav_DangXuat"
             android:title="Đăng xuất"
             android:icon="@drawable/ic_logout"/>

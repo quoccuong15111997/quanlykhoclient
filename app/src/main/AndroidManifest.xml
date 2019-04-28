@@ -6,8 +6,8 @@
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.CALL_PHONE"/>
-    <uses-permission android:name="android.permission.SEND_SMS"/>
+    <uses-permission android:name="android.permission.CALL_PHONE" />
+    <uses-permission android:name="android.permission.SEND_SMS" />
 
     <application
         android:allowBackup="true"
@@ -18,10 +18,12 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".ThemSanPhamActivity"></activity>
+        <activity android:name=".VideoViewerActivity"></activity>
+        <activity android:name=".AboutActivity" />
+        <activity android:name=".ThemSanPhamActivity" />
         <activity android:name=".ImageViewActivity" />
         <activity android:name=".ChiTietNhanSu" />
-        <activity android:name="com.example.firebase.PushDataActivity"></activity>
+        <activity android:name="com.example.firebase.PushDataActivity" />
         <activity android:name=".SuaNhanVienActivity" />
         <activity android:name=".ThemNhanVienActivity" />
         <activity android:name=".NhanSuActivity" />

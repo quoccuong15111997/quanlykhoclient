@@ -2,15 +2,17 @@ package com.example.quanlykho;
 
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
-import android.support.v7.app.ActionBar;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -31,6 +33,12 @@ public class LoginActivity extends AppCompatActivity {
     Button btnLogin;
     ProgressDialog progressDialog;
     AlertDialog.Builder alertDialog;
+    CheckBox chkRemember;
+    SharedPreferences sharedPreferences;
+    public static final String MyPREFERENCES = "MyPrefs";
+    public static final String USERNAME = "userNameKey";
+    public static final String PASS = "passKey";
+    public static final String REMEMBER = "remember";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,11 +46,17 @@ public class LoginActivity extends AppCompatActivity {
         setContentView(R.layout.activity_login);
         addControl();
         addEvents();
+        loadData();
     }
     private void addEvents() {
         btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if (chkRemember.isChecked())
+                    //lưu lại thông tin đăng nhập
+                    saveData(edtUserName.getText().toString(),edtPassword.getText().toString());
+                else
+                    clearData();
                 LayChiTietNhanVienTheoUserNameTask task= new LayChiTietNhanVienTheoUserNameTask();
                 task.execute(URLEncoder.encode(edtUserName.getText().toString()));
             }
@@ -50,11 +64,35 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void addControl() {
+        sharedPreferences = getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
         edtUserName=findViewById(R.id.edtUserName);
         edtPassword=findViewById(R.id.edtPassword);
         btnLogin=findViewById(R.id.btnLogin);
+        chkRemember=findViewById(R.id.chkRemember);
+    }
+    private void clearData() {
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.clear();
+        editor.commit();
     }
 
+    private void saveData(String username, String Pass) {
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString(USERNAME, username);
+        editor.putString(PASS, Pass);
+        editor.putBoolean(REMEMBER,chkRemember.isChecked());
+        editor.commit();
+    }
+    private void loadData() {
+        if(sharedPreferences.getBoolean(REMEMBER,false)) {
+            edtUserName.setText(sharedPreferences.getString(USERNAME, ""));
+            edtPassword.setText(sharedPreferences.getString(PASS, ""));
+            chkRemember.setChecked(true);
+        }
+        else
+            chkRemember.setChecked(false);
+
+    }
 
     class LayChiTietNhanVienTheoUserNameTask extends AsyncTask<String,Void, NhanVien> {
         @Override
