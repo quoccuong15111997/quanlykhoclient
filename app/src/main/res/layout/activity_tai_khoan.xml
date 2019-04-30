@@ -215,7 +215,7 @@
                 android:layout_marginLeft="10dp"
                 android:layout_marginRight="10dp"
                 android:background="@drawable/boder"
-                android:inputType="number"
+                android:inputType="textEmailAddress"
                 android:textSize="18dp" />
         </LinearLayout>
     </LinearLayout>

@@ -20,6 +20,7 @@ import com.example.model.NhanVien;
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
     NhanVien nhanVien;
+    String KEY_NHAN_VIEN="";
     Toolbar toolbar;
    /* TextView txtTenNhanVien, txtDiachi, txtPhone, txtMail, txtUsername, txtChucVu;
     NhanVien nhanVienLoagin;*/
@@ -61,7 +62,7 @@ public class MainActivity extends AppCompatActivity
     private void addControls() {
         Intent intentNhanVien=getIntent();
         nhanVien= (NhanVien) intentNhanVien.getSerializableExtra("NHANVIEN");
-
+        KEY_NHAN_VIEN=intentNhanVien.getStringExtra("KEYNHANVIEN");
     }
 
     @Override
@@ -123,6 +124,7 @@ public class MainActivity extends AppCompatActivity
         else if(id==R.id.nav_TaiKhoan){
             Intent intent= new Intent(MainActivity.this,TaiKhoanActivity.class);
             intent.putExtra("NHANVIEN",nhanVien);
+            intent.putExtra("KEYNHANVIEN",KEY_NHAN_VIEN);
             startActivity(intent);
         }
         else if(id==R.id.nav_DoiMatKhau){

@@ -19,6 +19,10 @@ import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
+import agency.tango.android.avatarview.IImageLoader;
+import agency.tango.android.avatarview.loader.PicassoLoader;
+import agency.tango.android.avatarview.views.AvatarView;
+
 public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
     private Context mContext;
     private ArrayList<ChatMessage> chatData;
@@ -59,6 +63,8 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
                     chatMessage.getMessageTime()));
             viewHolder.messageUser.setText(chatMessage.getMessageUser());
             Picasso.with(mContext).load(chatMessage.getUrlImage()).into(viewHolder.imgAvarta);
+        IImageLoader iImageLoader= new PicassoLoader();
+        iImageLoader.loadImage(viewHolder.imgAvarta,chatMessage.getUrlImage(),chatMessage.getMessageUser());
     }
 
     @Override
@@ -82,7 +88,7 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
         TextView messageText;
         TextView messageUser;
         TextView messageTime;
-        ImageView imgAvarta;
+        AvatarView imgAvarta;
         LinearLayout llItemChat;
 
         public ViewHolder(@NonNull View itemView) {

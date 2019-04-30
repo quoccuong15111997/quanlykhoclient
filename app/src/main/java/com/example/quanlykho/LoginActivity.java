@@ -8,6 +8,8 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
@@ -17,7 +19,12 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.example.conts.Constant;
+import com.example.firebase.NhanVienFirebase;
 import com.example.model.NhanVien;
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.FirebaseDatabase;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -39,6 +46,7 @@ public class LoginActivity extends AppCompatActivity {
     public static final String USERNAME = "userNameKey";
     public static final String PASS = "passKey";
     public static final String REMEMBER = "remember";
+    public static String KEY_NHAN_VIEN="";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -111,9 +119,11 @@ public class LoginActivity extends AppCompatActivity {
             if(nhanVien!=null){
                 String pass=nhanVien.getPassword();
                 if (pass.equals(edtPassword.getText().toString())){
+                    initFirebase(nhanVien);
                     Intent intent= new Intent(LoginActivity.this,MainActivity.class);
                     Toast.makeText(LoginActivity.this,"Đăng nhập thành công",Toast.LENGTH_LONG).show();
                     intent.putExtra("NHANVIEN",nhanVien);
+                    intent.putExtra("KEYNHANVIEN",KEY_NHAN_VIEN);
                     startActivity(intent);
                 }
                 else {
@@ -199,5 +209,36 @@ public class LoginActivity extends AppCompatActivity {
             }
             return null;
         }
+    }
+    public void initFirebase(final NhanVien nhanVien) {
+        FirebaseDatabase.getInstance().getReference().child("NhanVien").addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+                NhanVienFirebase nhanVienFirebase=dataSnapshot.getValue(NhanVienFirebase.class);
+                if(nhanVienFirebase.getMaNhanVien()==nhanVien.getMaNhanVien()){
+                    KEY_NHAN_VIEN=dataSnapshot.getKey();
+                }
+            }
+
+            @Override
+            public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+
+            }
+
+            @Override
+            public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
+
+            }
+
+            @Override
+            public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
     }
 }

@@ -85,7 +85,7 @@ public class TaiKhoanActivity extends AppCompatActivity {
             @Override
             public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
                 NhanVienFirebase nhanVienFirebase=dataSnapshot.getValue(NhanVienFirebase.class);
-                if(nhanVienFirebase.getMaNhanVien()==nhanVienLogin.getMaNhanVien()){
+                if(nhanVienFirebase.getUserName().equals(nhanVienLogin.getUserName())==true){
                     KEY=dataSnapshot.getKey();
                     urlImage=nhanVienFirebase.getUrlImage();
                     imageLoader.loadImage(avatarView,urlImage,nhanVienFirebase.getTenNhanVien());
@@ -193,6 +193,7 @@ public class TaiKhoanActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
         nhanVienLogin = (NhanVien) intent.getSerializableExtra("NHANVIEN");
+        KEY=intent.getStringExtra("KEYNHANVIEN");
 
         et_Ma.setText(nhanVienLogin.getMaNhanVien()+"");
         et_Ten.setText(nhanVienLogin.getTenNhanVien());
