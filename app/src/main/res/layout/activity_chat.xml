@@ -5,15 +5,24 @@
     android:id="@+id/activity_main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingBottom="@dimen/activity_vertical_margin"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.example.quanlykho.ChatActivity">
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/iv_back"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginBottom="527dp"
+        android:clickable="true"
+        android:src="@drawable/undo_50px"
+        android:tint="@android:color/white"
+        app:fabSize="mini" />
 
 
     <android.support.design.widget.FloatingActionButton
         android:layout_width="wrap_content"
+        android:layout_margin="@dimen/w16"
         android:layout_height="wrap_content"
         android:clickable="true"
         android:src="@drawable/ic_menu_send"
@@ -24,6 +33,7 @@
         app:fabSize="mini" />
 
     <android.support.design.widget.TextInputLayout
+        android:layout_margin="@dimen/w16"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_toLeftOf="@id/fab"
@@ -38,13 +48,14 @@
             />
     </android.support.design.widget.TextInputLayout>
 
-    <ListView
+    <android.support.v7.widget.RecyclerView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_alignParentTop="true"
         android:layout_alignParentStart="true"
         android:layout_above="@id/fab"
         android:dividerHeight="16dp"
+        android:layout_margin="@dimen/w16"
         android:divider="@android:color/transparent"
         android:id="@+id/lvMessages"
         android:layout_marginBottom="16dp"/>

@@ -1,16 +1,21 @@
 package com.example.quanlykho;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.ListView;
+import android.widget.ImageView;
 
-import com.example.adapter.MessageAdapter;
+import com.example.adapter.ChatAdapter;
+import com.example.adapterimpl.ItemClick;
 import com.example.firebase.ChatMessage;
 import com.example.firebase.NhanVienFirebase;
 import com.example.model.NhanVien;
@@ -26,14 +31,16 @@ import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
 
-public class ChatActivity extends AppCompatActivity {
+public class ChatActivity extends AppCompatActivity implements ItemClick {
     FloatingActionButton fabSend;
     EditText edtInput;
-    ListView lvMessege;
+    RecyclerView rcyMessege;
+    ImageView imgBack;
     Intent intent;
     NhanVien nhanVien;
-    MessageAdapter adapter;
+    ChatAdapter adapter;
     ArrayList<ChatMessage> dsMessages;
+    ArrayList<String> dsKEY=new ArrayList<>();
     private FirebaseAuth mAuth = FirebaseAuth.getInstance();
     private DatabaseReference mData = FirebaseDatabase.getInstance().getReference();
     String urlImage="";
@@ -78,7 +85,7 @@ public class ChatActivity extends AppCompatActivity {
         });
     }
 
-    private void addEvents() {
+    private void   addEvents() {
         fabSend.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -91,6 +98,12 @@ public class ChatActivity extends AppCompatActivity {
                 edtInput.setText("");
             }
         });
+        imgBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
     }
 
     private void addControls() {
@@ -100,9 +113,12 @@ public class ChatActivity extends AppCompatActivity {
         dsMessages = new ArrayList<>();
         fabSend = findViewById(R.id.fab);
         edtInput = findViewById(R.id.edtInput);
-        lvMessege = findViewById(R.id.lvMessages);
-        adapter = new MessageAdapter(ChatActivity.this,R.layout.item_chat_guest,dsMessages);
-        lvMessege.setAdapter(adapter);
+        imgBack=findViewById(R.id.iv_back);
+        rcyMessege = findViewById(R.id.lvMessages);
+        rcyMessege.setLayoutManager(new LinearLayoutManager(ChatActivity.this));
+        adapter = new ChatAdapter(ChatActivity.this,dsMessages,nhanVien);
+        adapter.isClicked(this);
+        rcyMessege.setAdapter(adapter);
         Login(nhanVien.getEmail().toString(), nhanVien.getPassword().toString());
     }
     private void Login(String email, String password) {
@@ -125,9 +141,10 @@ public class ChatActivity extends AppCompatActivity {
             @Override
             public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
                 ChatMessage chatMessage=dataSnapshot.getValue(ChatMessage.class);
-                chatMessage.setMessageUser(nhanVien.getUserName());
                 dsMessages.add(chatMessage);
+                dsKEY.add(dataSnapshot.getKey());
                 adapter.notifyDataSetChanged();
+                rcyMessege.smoothScrollToPosition(rcyMessege.getAdapter().getItemCount() - 1);
             }
 
             @Override
@@ -151,4 +168,41 @@ public class ChatActivity extends AppCompatActivity {
             }
         });
     }
+
+    @Override
+    public void isItemClick(final int position) {
+        final ChatMessage chatMessage=dsMessages.get(position);
+        //Toast.makeText(ChatActivity.this,"chọn: "+chatMessage.getMessageUser(),Toast.LENGTH_LONG).show();
+        AlertDialog.Builder builder= new AlertDialog.Builder(ChatActivity.this);
+        builder.setTitle("Chọn chức năng");
+        builder.setNegativeButton("Xóa", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                xuLyXoaTinNhan(position);
+            }
+        }).show();
+    }
+
+    private void xuLyXoaTinNhan(int position) {
+        dsMessages.remove(dsMessages.get(position));
+        adapter.notifyDataSetChanged();
+        mData.child("chats").child(dsKEY.get(position)).removeValue().addOnCompleteListener(ChatActivity.this, new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                if (task.isSuccessful()) {
+                    AlertDialog.Builder mess= new AlertDialog.Builder(ChatActivity.this);
+                    mess.setTitle("Xóa thành công").setIcon(R.drawable.ic_ok).setNegativeButton("OK", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                        }
+                    }).show();
+                }
+                else {
+                    AlertDialog.Builder mess= new AlertDialog.Builder(ChatActivity.this);
+                    mess.setTitle("Xóa thất bại").setIcon(R.drawable.ic_error).show();
+                }
+            }
+        });
+    }
+
 }

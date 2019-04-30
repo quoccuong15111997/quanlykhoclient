@@ -14,36 +14,51 @@
         android:layout_marginTop="7dp"
         android:layout_width="@dimen/w40"
         android:layout_height="@dimen/w40" />
+
     <LinearLayout
-        android:clickable="true"
-        android:layout_toRightOf="@+id/iv_avatar"
-        android:orientation="vertical"
-        android:background="@drawable/bg_item_chat_guest"
-        android:paddingLeft="@dimen/w10"
-        android:paddingRight="@dimen/w10"
-        android:paddingTop="@dimen/w5"
-        android:paddingBottom="@dimen/w5"
+        android:id="@+id/llIemChat"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="2dp"
+        android:layout_toRightOf="@+id/iv_avatar"
+        android:background="@drawable/bg_item_chat_guest"
+        android:clickable="true"
+        android:orientation="vertical"
+        android:paddingLeft="@dimen/w10"
+        android:paddingTop="@dimen/w5"
+        android:paddingRight="@dimen/w10"
+        android:paddingBottom="@dimen/w5">
 
         <TextView
             android:id="@+id/message_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="left"
-            android:layout_margin="@dimen/w5"/>
+            android:layout_margin="@dimen/w5"
+            android:text="ssssssss" />
+
         <LinearLayout
-            android:orientation="horizontal"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
 
             <TextView
+                android:id="@+id/message_user"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/w5"
-                android:textSize="12sp"
+                android:text="ssssssss"
                 android:textColor="#8D8D8D"
+                android:textSize="12sp" />
+
+            <TextView
                 android:id="@+id/message_time"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/w5"
+                android:text="ssssssss"
+                android:textColor="#8D8D8D"
+                android:textSize="12sp" />
         </LinearLayout>
     </LinearLayout>
 </RelativeLayout>

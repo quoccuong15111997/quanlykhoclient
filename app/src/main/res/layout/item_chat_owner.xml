@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    android:paddingLeft="@dimen/w16"
+    android:paddingRight="@dimen/w16"
+    android:paddingTop="@dimen/w10"
+    android:paddingBottom="@dimen/w10"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+    <LinearLayout
+        android:id="@+id/llIemChat"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="end"
+        android:orientation="horizontal">
+        <LinearLayout
+            android:clickable="true"
+            android:layout_toRightOf="@+id/iv_avatar"
+            android:orientation="vertical"
+            android:background="@drawable/bg_item_chat_owner"
+            android:paddingLeft="@dimen/w10"
+            android:paddingRight="@dimen/w10"
+            android:paddingTop="@dimen/w5"
+            android:paddingBottom="@dimen/w5"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/message_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="left"
+                android:text="ssssssss"
+                android:layout_margin="@dimen/w5"/>
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+                <TextView
+                    android:layout_marginLeft="@dimen/w5"
+                    android:textSize="12sp"
+                    android:textColor="#8D8D8D"
+                    android:id="@+id/message_user"
+                    android:text="ssssssss"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+
+                <TextView
+                    android:layout_marginLeft="@dimen/w5"
+                    android:textSize="12sp"
+                    android:textColor="#8D8D8D"
+                    android:id="@+id/message_time"
+                    android:text="ssssssss"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+            </LinearLayout>
+        </LinearLayout>
+        <ImageView
+            android:id="@+id/iv_avatar"
+            android:layout_width="@dimen/w40"
+            android:layout_height="@dimen/w40"
+            android:layout_marginTop="7dp"
+            android:src="@mipmap/ic_app" />
+    </LinearLayout>
+</RelativeLayout>
