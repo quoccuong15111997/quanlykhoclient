@@ -21,10 +21,15 @@ import android.widget.Toast;
 import com.example.conts.Constant;
 import com.example.firebase.NhanVienFirebase;
 import com.example.model.NhanVien;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.FirebaseApp;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.firebase.messaging.FirebaseMessaging;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -47,11 +52,13 @@ public class LoginActivity extends AppCompatActivity {
     public static final String PASS = "passKey";
     public static final String REMEMBER = "remember";
     public static String KEY_NHAN_VIEN="";
+    private static final String TAG = "LoginActivity";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+        FirebaseApp.initializeApp(this);
         addControl();
         addEvents();
         loadData();
@@ -72,6 +79,21 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void addControl() {
+        String token = FirebaseInstanceId.getInstance().getToken();
+        Log.d(TAG, "Token: " + token);
+
+        FirebaseMessaging.getInstance().subscribeToTopic("ThongBao")
+                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        String msg = "Đăng ký thành công";
+                        if (!task.isSuccessful()) {
+                            msg = "Đăng ký thất bại";
+                        }
+                        Log.d(TAG, msg);
+                        //Toast.makeText(LoginActivity.this, msg, Toast.LENGTH_SHORT).show();
+                    }
+                });
         sharedPreferences = getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
         edtUserName=findViewById(R.id.edtUserName);
         edtPassword=findViewById(R.id.edtPassword);
