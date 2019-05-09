@@ -5,10 +5,15 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".VideoViewerActivity">
-
     <VideoView
         android:id="@+id/videoView"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:layout_gravity="center"/>
+    <ImageView
+        android:id="@+id/iv_back"
+        android:layout_width="@dimen/w50"
+        android:layout_height="@dimen/w50"
+        android:padding="@dimen/mt10"
+        android:src="@drawable/ic_back"/>
 </FrameLayout>

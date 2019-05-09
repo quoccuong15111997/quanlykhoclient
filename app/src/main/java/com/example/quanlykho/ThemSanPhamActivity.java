@@ -166,6 +166,7 @@ public class ThemSanPhamActivity extends AppCompatActivity {
         iv_back=findViewById(R.id.iv_backChiTiet);
 
         et_Ma=findViewById(R.id.edtMaSpChiTiet);
+        et_Ma.setEnabled(false);
         et_Ten=findViewById(R.id.edtTenSpChiTiet);
         et_Gia=findViewById(R.id.edtDonGiaSpChiTiet);
         et_SoLuong=findViewById(R.id.edtSoLuongSpChiTiet);

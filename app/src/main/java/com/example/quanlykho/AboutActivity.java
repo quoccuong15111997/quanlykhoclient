@@ -1,10 +1,14 @@
 package com.example.quanlykho;
 
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AlertDialog;
+import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -50,8 +54,26 @@ public class AboutActivity extends Fragment {
             @Override
             public void onClick(View v) {
                 Intent intent= new Intent(view.getContext(),VideoViewerActivity.class);
-                intent.putExtra("VIDEO", Constant.NAME_VIDEO);
+                intent.putExtra("VIDEO", Constant.NAME_VIDEO_TRACUU);
                 startActivity(intent);
+            }
+        });
+        txtHoTro.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AlertDialog.Builder builder= new AlertDialog.Builder(view.getContext());
+                builder.setTitle("Liên hệ hỗ trợ");
+                builder.setNegativeButton("Gọi", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        xuLyGoiDienThoai();
+                    }
+                }).setPositiveButton("Gửi tin nhắn", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        xuLyGuiSMS();
+                    }
+                }).show();
             }
         });
 
@@ -70,5 +92,20 @@ public class AboutActivity extends Fragment {
         txtThemSuaXoa.setVisibility(View.GONE);
         txtNhanSu.setVisibility(View.GONE);
         txtTaiKhoan.setVisibility(View.GONE);
+    }
+    private void xuLyGuiSMS() {
+        String phone="0977929100";
+        Uri uri = Uri.parse("smsto:"+phone);
+        Intent it = new Intent(Intent.ACTION_SENDTO, uri);
+        it.putExtra("sms_body", "Tin nhắn được gửi từ: "+MainActivity.nhanVien.getTenNhanVien());
+        startActivity(it);
+    }
+
+    private void xuLyGoiDienThoai() {
+        String phone="0977929100";
+        Uri uri=Uri.parse("tel:"+phone);
+        Intent intent= new Intent(Intent.ACTION_DIAL,uri);
+        intent.setData(uri);
+        startActivity(intent);
     }
 }

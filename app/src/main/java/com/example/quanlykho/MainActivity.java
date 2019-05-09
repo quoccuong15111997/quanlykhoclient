@@ -19,7 +19,7 @@ import com.example.model.NhanVien;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
-    NhanVien nhanVien;
+    public static NhanVien nhanVien;
     String KEY_NHAN_VIEN="";
     Toolbar toolbar;
    /* TextView txtTenNhanVien, txtDiachi, txtPhone, txtMail, txtUsername, txtChucVu;

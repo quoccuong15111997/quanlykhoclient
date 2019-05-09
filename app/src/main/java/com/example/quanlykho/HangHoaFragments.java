@@ -101,6 +101,12 @@ public class HangHoaFragments extends Fragment implements DeleteButtonOnclick {
         imgSort.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if(positionChucNang==0){
+                    spiner_ChungLoai.setVisibility(View.VISIBLE);
+                }
+                if(positionChucNang==2){
+                    llGia.setVisibility(View.VISIBLE);
+                }
                 spinner_ChucNang.setVisibility(View.VISIBLE);
                 imgSort.setVisibility(View.GONE);
                 imgSortClicked.setVisibility(View.VISIBLE);
@@ -115,6 +121,7 @@ public class HangHoaFragments extends Fragment implements DeleteButtonOnclick {
                 imgSortClicked.setVisibility(View.GONE);
                 spiner_ChungLoai.setVisibility(View.GONE);
                 txtLoc.setVisibility(View.GONE);
+                llGia.setVisibility(View.GONE);
             }
         });
         lvSanPham.setOnItemClickListener(new AdapterView.OnItemClickListener() {

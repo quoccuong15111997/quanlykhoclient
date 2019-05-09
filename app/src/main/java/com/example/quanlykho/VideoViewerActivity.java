@@ -6,11 +6,14 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.View;
+import android.widget.ImageView;
 import android.widget.MediaController;
 import android.widget.VideoView;
 
 public class VideoViewerActivity extends AppCompatActivity {
     private VideoView videoView;
+    private ImageView imgBack;
     private int position = 0;
     private MediaController mediaController;
     Intent intent;
@@ -46,12 +49,19 @@ public class VideoViewerActivity extends AppCompatActivity {
                 });
             }
         });
+        imgBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
     }
 
     private void addControls() {
         intent=getIntent();
         videoName=intent.getStringExtra("VIDEO");
         videoView =findViewById(R.id.videoView);
+        imgBack=findViewById(R.id.iv_back);
 
         // Tạo bộ điều khiển
         if (mediaController == null) {

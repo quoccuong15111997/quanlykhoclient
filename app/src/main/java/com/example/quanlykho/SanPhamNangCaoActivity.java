@@ -326,7 +326,9 @@ public class SanPhamNangCaoActivity extends AppCompatActivity {
             super.onPostExecute(aBoolean);
             if(aBoolean==true){
                 Toast.makeText(SanPhamNangCaoActivity.this, "Lưu thành công", Toast.LENGTH_LONG).show();
-                xuLyUpload();
+               if(bitmapCamera!=null){
+                   xuLyUpload();
+               }
             }
             else {
                 Toast.makeText(SanPhamNangCaoActivity.this, "Lưu thất bại", Toast.LENGTH_LONG).show();
