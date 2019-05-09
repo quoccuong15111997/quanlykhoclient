@@ -142,7 +142,7 @@ public class ChatActivity extends AppCompatActivity implements ItemClick {
                             //Toast.makeText(ChatActivity.this, "Đăng nhập firebase thành công", Toast.LENGTH_LONG).show();
                             displayChatMessages();
                         } else {
-                            //Toast.makeText(ChatActivity.this, "Đăng nhập firebase thất bại", Toast.LENGTH_LONG).show();
+                           Login("quoccuong151197@gmail.com","admin1");
                         }
                     }
                 });
